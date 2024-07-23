@@ -5,6 +5,7 @@ import Login from "./pages/login";
 import SubPage from "./pages/subLandinPage";
 import AppQuery from "./query/appQuery";
 import UserContextProvider from "./userContext/userContextProvide";
+import Register from "./pages/register";
 function App() {
   return (
     
@@ -21,6 +22,7 @@ function App() {
               }
             />
             <Route path="/profile" element={<Profile />} />
+            <Route path='/register' element={<Register/>} />
             <Route path="/login" element={<Login />} />
           </Routes>
           </BrowserRouter>

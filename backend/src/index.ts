@@ -1,13 +1,18 @@
 const express = require("express");
 const cors = require("cors");
+import cookieParser from 'cookie-parser'
 require("dotenv").config();
 const app = express();
 const task = require("./router/task");
 import connectDB from './db/connectDb'
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true, 
+}))
 app.use(express.json());
 app.use("/user", task);
+app.use(cookieParser())
 
 const start = async () => {
   try {

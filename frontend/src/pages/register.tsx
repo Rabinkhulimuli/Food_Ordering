@@ -1,17 +1,17 @@
 import { useMutation } from "react-query";
 import React from "react";
 import { useContext, FormEvent, useEffect, useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   UserContext,
   UserContextType,
 } from "../userContext/userContextProvide";
-import { loginUser } from "../api/apiList";
+import { postUser } from "../api/apiList";
 export interface formData {
   email: string;
   password: string;
 }
-export default function Login() {
+export default function Register() {
   const [data, setData] = useState<formData>({ email: " ", password: "" });
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -20,13 +20,13 @@ export default function Login() {
     });
   };
   const { login, setLogin } = useContext<UserContextType>(UserContext);
-  const postData = useMutation(loginUser, {
+  const postData = useMutation(postUser, {
     onSuccess: () => {
-      console.log("user login successfully");
+      console.log("user created successfully");
       setLogin(true);
     },
     onError: (err) => {
-      console.log("error logged in user", err);
+      console.log("error creating user", err);
     },
   });
 
@@ -37,14 +37,14 @@ export default function Login() {
     }
   }, [login, navigate]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    postData.mutate(data);
+    await postData.mutate(data);
   };
   return (
     <>
       <h2 className=" w-full text-center text-2xl font-black shadow">
-        Log in to your account
+        Register Now
       </h2>
       <form onSubmit={handleSubmit} className=" bg-indigo-200 px-6 py-8">
         <div>
@@ -73,9 +73,7 @@ export default function Login() {
         <button className=" bg-teal-500 my-4 w-full text-3xl font-bold text-white py-1 ">
           Submit
         </button>
-        <span className=" flex font-bold text-white items-center justify-center " >Dont have an account <Link to='/register' className="underline  mx-1 text-red-500"> Register</Link> </span>
       </form>
-      
     </>
   );
 }

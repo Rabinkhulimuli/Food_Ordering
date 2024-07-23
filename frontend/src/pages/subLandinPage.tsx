@@ -9,21 +9,25 @@ export default function SubPage() {
           src="/hero.png"
         ></img>
       </div>
-      <div className="flex flex-col items-center rounded-md shadow-lg   p-4 px-8 mx-32">
+      <div className="flex flex-col items-center rounded-md shadow-lg bg-gray-500   p-4 px-8 mx-32">
         <h2 className="text-2xl font-bold tracking-tight text-orange-700 ">
           Tuck into a takeaway today
         </h2>
         <p>Food is just a click away!</p>
+        <div className=" w-full " >
+          <img className=" max-w-8 absolute z-10 m-4 hidden md:block " src="/search.svg" ></img>
         <input
           value={food}
           onChange={(event) => setFood(event?.target.value)}
-          className=" shadow w-full text-center rounded-xl p-2 "
+          className=" md:relative shadow w-full   text-center rounded-xl p-4 "
           type="text"
           placeholder="Search By City Or Town"
         />
-        <button className=" shadow w-full text-center rounded-xl p-2 my-1 bg-orange-500 font-bold text-lg text-white hover:bg-orange-600">
+        <button className="md:w-24  md:absolute md:right-40 md:m-2  shadow w-full text-center rounded-xl p-2 my-1 bg-orange-500 font-bold text-lg text-white hover:bg-orange-600">
           Search
         </button>
+        </div>
+        
       </div>
       <div className=" grid md:grid-cols-2 gap-5 py-5 ">
         <img className="" src="/landing.png"></img>

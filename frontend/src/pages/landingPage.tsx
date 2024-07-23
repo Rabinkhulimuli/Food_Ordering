@@ -31,6 +31,7 @@ export default function LandingPage({ children }: Props) {
               >
                 Log In
               </Link>
+             
             </div>
           )}
           {login && (

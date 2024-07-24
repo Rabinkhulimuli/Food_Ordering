@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-import cookieParser from 'cookie-parser'
+const cookieParser=require('cookie-parser')
 require("dotenv").config();
 const app = express();
 const task = require("./router/task");

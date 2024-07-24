@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useContext, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,13 +6,14 @@ import {
   UserContext,
   UserContextType,
 } from "../userContext/userContextProvide";
-import { postUser } from "../api/apiList";
+import { postUser,postResponse } from "../api/apiList";
 export interface formData {
   email: string;
   password: string;
 }
 export default function Register() {
   const [data, setData] = useState<formData>({ email: " ", password: "" });
+  const[er,setEr]=useState<string>('')
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setData((prev) => {
@@ -20,12 +21,16 @@ export default function Register() {
     });
   };
   const { login, setLogin } = useContext<UserContextType>(UserContext);
-  const postData = useMutation(postUser, {
+  const postData = useMutation<postResponse,Error,formData>({
+    mutationFn:postUser,
     onSuccess: () => {
       console.log("user created successfully");
       setLogin(true);
     },
     onError: (err) => {
+      if(err.message==='user with this email already exist'){
+        setEr(err.message)
+      }
       console.log("error creating user", err);
     },
   });
@@ -48,6 +53,8 @@ export default function Register() {
       </h2>
       <form onSubmit={handleSubmit} className=" bg-indigo-200 px-6 py-8">
         <div>
+        <span className=" text-lg text-red-500 font-semibold w-full text-center bg-red-50" >{er} </span>
+        <div></div>
           <label>Email</label>
           <input
             type="email"

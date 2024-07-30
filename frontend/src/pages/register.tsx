@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import axios from 'axios'
 import React from "react";
 import { useContext, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -6,13 +6,13 @@ import {
   UserContext,
   UserContextType,
 } from "../userContext/userContextProvide";
-import { postUser,postResponse } from "../api/apiList";
+
 export interface formData {
   email: string;
   password: string;
 }
 export default function Register() {
-  const [data, setData] = useState<formData>({ email: " ", password: "" });
+  const [data1, setData] = useState<formData>({ email: " ", password: "" });
   const[er,setEr]=useState<string>('')
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -20,31 +20,26 @@ export default function Register() {
       return { ...prev, [name]: value };
     });
   };
-  const { login, setLogin } = useContext<UserContextType>(UserContext);
-  const postData = useMutation<postResponse,Error,formData>({
-    mutationFn:postUser,
-    onSuccess: () => {
-      console.log("user created successfully");
-      setLogin(true);
-    },
-    onError: (err) => {
-      if(err.message==='user with this email already exist'){
-        setEr(err.message)
-      }
-      console.log("error creating user", err);
-    },
-  });
-
+  const { login } = useContext<UserContextType>(UserContext);
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (login) {
       navigate("/");
     }
+
   }, [login, navigate]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await postData.mutate(data);
+    try{
+       await axios.post('/my-user',data1)
+  
+      navigate('/login')
+    }catch(err){
+      
+      console.log(err)
+    }
   };
   return (
     <>
@@ -60,7 +55,7 @@ export default function Register() {
             type="email"
             name="email"
             placeholder="xyz@gmail.com"
-            value={data.email}
+            value={data1.email}
             onChange={handleChange}
             required
             className="border block w-1/2 hover:bg-gray-100 mx-4 shadow"
@@ -71,7 +66,7 @@ export default function Register() {
           <input
             type="password"
             name="password"
-            value={data.password}
+            value={data1.password}
             onChange={handleChange}
             required
             className="border block w-1/2 hover:bg-gray-100 mx-4 shadow"

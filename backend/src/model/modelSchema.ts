@@ -7,6 +7,18 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required:true
+    },
+    name:{
+        type:String,
+    },
+    contact:{
+        type:Number,
+    },
+    address:{
+        type:String
+    },
+    city:{
+        type:String
     }
 })
 const user= mongoose.model('NUser',userSchema)

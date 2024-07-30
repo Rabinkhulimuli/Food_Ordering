@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+
 import React from "react";
 import { useContext, FormEvent, useEffect, useState } from "react";
 import { useNavigate,Link } from "react-router-dom";
@@ -6,7 +6,7 @@ import {
   UserContext,
   UserContextType,
 } from "../userContext/userContextProvide";
-import { loginUser,loginResponse } from "../api/apiList";
+import axios from  'axios'
 
 export interface formData {
   email: string;
@@ -22,24 +22,9 @@ export default function Login() {
       return { ...prev, [name]: value };
     });
   };
-  const { login, setLogin ,setToken} = useContext<UserContextType>(UserContext);
+  const { login, setLogin ,setUser} = useContext<UserContextType>(UserContext);
  
-  const {mutate,} = useMutation<loginResponse, Error, formData>({
-    mutationFn: loginUser,
-    onSuccess: (data) => {
-        setToken(data.token); // Assuming the response contains the token
-        console.log("Successfully logged in");
-        setLogin(true)
-    },
-    onError: (err:Error) => {
-        
-        if(err.message === 'Incorrect password' || err.message==="User wasnt found" || err.message==='User credential couldnt verified'){
-          setEr(err.message)
-        }
-        console.error("error ",err.message);
-    }
-});
-
+ 
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -48,9 +33,16 @@ export default function Login() {
     }
   }, [login, navigate]);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    mutate(data1);
+    try{
+      const {data}= await axios.post('/user-loggin',data1)
+      console.log(data)
+      setUser(data)
+      setLogin(true)
+    }catch(err){
+      console.log("error logging in")
+    }
   };
   return (
     <>

@@ -28,7 +28,7 @@ export default function Login() {
     mutationFn: loginUser,
     onSuccess: (data) => {
         setToken(data.token); // Assuming the response contains the token
-        console.log("Successfully logged in");
+        console.log("Successfully logged in",data);
         setLogin(true)
     },
     onError: (err:Error) => {

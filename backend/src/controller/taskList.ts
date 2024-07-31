@@ -1,81 +1,79 @@
-import {Request,Response} from 'express'
-const NUser= require('../model/modelSchema')
-const bcrypt=require('bcryptjs')
-const bcryptSalt= bcrypt.genSaltSync(10)
-const jwt = require('jsonwebtoken')
-require ('dotenv').config()
-const jwtSecret= process.env.JWT_SECRET as string
-const createUser=async (req:Request,res:Response)=> {
-    try{
-        const {email,password}= await req.body
-        
-        const Nuser= await NUser.findOne({email})
-        if(Nuser){
-            res.status(404).json({msg:"user with this email already exist"})
-        }else{
-           const user= await NUser.create({
-            email,
-            password:bcrypt.hashSync(password,bcryptSalt),
-           })
-        res.status(200).json(user) 
-        }
-        
-    }catch(err){
-        res.status(404).json({msg:"error creating user"})
-    }
-    
+import { Request, Response } from 'express';
+import NUser from '../model/modelSchema';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const bcryptSalt = bcrypt.genSaltSync(10);
+const jwtSecret = process.env.JWT_SECRET as string;
+
+if (!jwtSecret) {
+    throw new Error("JWT_SECRET environment variable is not defined");
 }
-const loggin=async (req:Request,res:Response)=> {
-    try{
-        if (!jwtSecret) {
-            throw new Error("JWT_SECRET environment variable is not defined");
-        }
-        const {email,password}= req.body
-        const userEmail= await NUser.findOne({email})
-        
-        if(userEmail){
-            if(email === userEmail.email){
-                const passOk= bcrypt.compareSync(password,userEmail.password)
-            if(passOk){
-                jwt.sign({email:userEmail.email,id:userEmail._id},jwtSecret,{},(err :Error , token: string )=> {
-                    if(err){
-                        throw err
-                    }
-                    
-                    res.cookie("token",token,{
-                        httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-                        secure: process.env.NODE_ENV === 'production', // Set to true if using HTTPS
-                        sameSite: 'strict', // Required for cross-site cookies, adjust based on your setup
-                      
-                    } ).status(200).json({email:userEmail.email,id:userEmail._id})
-                })
-            } else{
-                res.status(401).json({msg:"Incorrect password"})
-            }
-        }else{
-            res.status(404).json({msg:"User wasnt found"})
-        }
-        } else {
-            res.status(404).json({msg:"User credential couldnt verified"})
-        }
-        
-    }catch(err){
-        res.status(404).json({msg:"error getting user"})
-    }
-}
-const getProfile= async (req: Request, res: Response) => {
+
+const createUser = async (req: Request, res: Response) => {
     try {
-        if (!jwtSecret) {
-            throw new Error("JWT_SECRET environment variable is not defined");
+        const { email, password } = req.body;
+
+        const existingUser = await NUser.findOne({ email });
+        if (existingUser) {
+            return res.status(409).json({ msg: "User with this email already exists" });
         }
-       
-        const{ token }= req.cookies
+
+        const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
+        const user = await NUser.create({ email, password: hashedPassword });
+
+        return res.status(201).json(user);
+    } catch (err) {
+        console.error("Error creating user:", err);
+        return res.status(500).json({ msg: "Error creating user" });
+    }
+};
+
+const loggin = async (req: Request, res: Response) => {
+    try {
+        const { email, password } = req.body;
+        const user = await NUser.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        const isPasswordCorrect = bcrypt.compareSync(password, user.password);
+        if (!isPasswordCorrect) {
+            return res.status(401).json({ msg: "Incorrect password" });
+        }
+
+        jwt.sign({ email: user.email, id: user._id }, jwtSecret, {}, (err, token) => {
+            if (err) {
+                throw err;
+            }
+
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+            });
+
+            return res.status(200).json({ email: user.email, id: user._id });
+        });
+    } catch (err) {
+        console.error("Error logging in:", err);
+        return res.status(500).json({ msg: "Error logging in" });
+    }
+};
+
+const getProfile = async (req: Request, res: Response) => {
+    try {
+        const { token } = req.cookies;
 
         if (!token) {
-            return res.status(401).json({ msg: "No token provided" }); // Use 401 for unauthorized
+            return res.status(401).json({ msg: "No token provided" });
         }
 
-        jwt.verify(token, jwtSecret, (err: Error | null, user: any) => {
+        jwt.verify(token, jwtSecret, (err, user) => {
             if (err || !user) {
                 return res.status(401).json({ msg: "Invalid token", error: err?.message });
             }
@@ -88,11 +86,4 @@ const getProfile= async (req: Request, res: Response) => {
     }
 };
 
-
-
-
-module.exports= {
-    createUser,
-    getProfile,
-    loggin,
-}
+export { createUser, loggin, getProfile };

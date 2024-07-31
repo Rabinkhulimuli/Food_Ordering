@@ -1,4 +1,5 @@
 import { formData } from "../pages/login";
+
 export interface loginResponse{
     token:string,
     user:{
@@ -7,10 +8,9 @@ export interface loginResponse{
 
     }
 }
-export interface profileResponse{
-    id:string,
-    email:string
-}
+export interface profileResponse {
+    email: string;
+  }
 export interface postResponse{
     email:string,
     password:string
@@ -21,7 +21,9 @@ const response = await fetch("http://localhost:5000/user/my-user",{
         method:'POST',
         headers :{
             'Content-Type':'application/json',
+            
         },
+        
         body: JSON.stringify(data),
     })
     if(!response.ok){
@@ -48,7 +50,9 @@ export const loginUser = async (data: formData): Promise<loginResponse> => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                
             },
+            credentials: 'include',
             body: JSON.stringify(data),
         });
 
@@ -56,8 +60,11 @@ export const loginUser = async (data: formData): Promise<loginResponse> => {
             const errorData = await response.json();
             throw new Error(errorData.msg || 'Network response was not okay');
         }
-
+        
         const loginData: loginResponse = await response.json();
+        const {token}= loginData
+        console.log("login",token)
+       
         return loginData;
     } catch (error) {
         throw new Error(error instanceof Error ? error.message : 'An unexpected error occurred');
@@ -65,19 +72,20 @@ export const loginUser = async (data: formData): Promise<loginResponse> => {
 };
 
 
-export const getProfile=async(token: string):Promise<profileResponse> => {
-    const response= await fetch("http://localhost:5000/user/profile",{
-        method:'GET',
-        headers:{
-            'Content-Type':'application/json',
-            Authorization:`Bearer ${token}`
-        },
+export const getProfile = async (token: string): Promise<profileResponse> => {
     
-    })
-    if(!response.ok){
-        throw new Error("error retriving user information")
+    const response = await fetch("http://localhost:5000/user/profile", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include"
+    });
+  
+    if (!response.ok) {
+      throw new Error("Error retrieving user information");
     }
-    const resData:profileResponse= await response.json()
-    return resData
-}
-
+    const {data}= await response.json()
+    return data;
+  };

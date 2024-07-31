@@ -3,13 +3,16 @@ import LandingPage from "./pages/landingPage";
 import Profile from "./pages/profile";
 import Login from "./pages/login";
 import SubPage from "./pages/subLandinPage";
-import AppQuery from "./query/appQuery";
+
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
+import axios from "axios";
+axios.defaults.baseURL="http://localhost:5000/user"
+axios.defaults.withCredentials=true
 function App() {
   return (
     
-      <AppQuery>
+     
         <UserContextProvider>
         <BrowserRouter>
           <Routes>
@@ -27,7 +30,7 @@ function App() {
           </Routes>
           </BrowserRouter>
         </UserContextProvider>
-      </AppQuery>
+    
     
   );
 }

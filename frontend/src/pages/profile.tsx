@@ -1,83 +1,41 @@
-/* import { useMutation,useQuery} from "@tanstack/react-query"
-import { useContext,useEffect } from "react"
-import { UserContext,UserContextType } from "../userContext/userContextProvide"
-import { getProfile,profileResponse } from "../api/apiList"
+import {UserContext,UserContextType} from  '../userContext/userContextProvide'
+import React, { useContext ,useState} from 'react'
+import axios from 'axios'
+interface userD{
+    name:string  
+    contact:number  
+    address:string
+    city:string
+}
 export default function Profile(){
-    
-    const {user,setUser,token}=useContext<UserContextType>(UserContext)
-    
-  const {mutate,isError,isSuccess}= useMutation<profileResponse,Error,string>({
-        mutationFn:getProfile,
-        onSuccess:(data:profileResponse)=> {
-            setUser(data)
-            console.log("user retrived successfully")
-        },
-        onError:(err:Error)=> {
-            console.log(err)
-        }
+    const {user}= useContext<UserContextType>(UserContext)
+   const[userData,setUserData]=useState<userD>({name:'',contact:0,address:'',city:''})
+   const setChange= (ev:React.ChangeEvent<HTMLInputElement>)=> {
+    const{name,value}=ev.target
+    setUserData((prev)=> {
+        return {...prev,[name]:value}
     })
-    useEffect(()=> {
-        if(token){
-            mutate(token)
-        }
-     },[token,mutate])
-    
-    if(isError){
-        return(<div>Error loading page</div>)
-    }    
-        
-    return(
-        <>
-            <h1>Your Profile </h1>
-            <span>Hey {user.email}</span>
-        </>
-    )
-} */
-
-// components/Profile.tsx
-import { useQuery } from "@tanstack/react-query";
-import { useContext,useEffect } from "react";
-import { UserContext, UserContextType } from "../userContext/userContextProvide";
-import { profileResponse } from "../api/apiList";
-
-export default function Profile() {
-    const { user, setUser, token } = useContext<UserContextType>(UserContext);
-    
-    const { data, error, isError, isLoading } = useQuery<profileResponse, Error>({
-        queryKey:['profile'], // query key
-        queryFn:async () => {
-            if (!token) {
-                throw new Error('No token available');
-            }
-            const response = await fetch("http://localhost:5000/user/profile", {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.message || 'Failed to fetch profile');
-            }
-
-            return response.json();
-        }
-    });
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    if (isError) {
-        return <div>Error: {error?.message}</div>;
-    }
-
+   }
+   const updateForm=async (ev:React.FormEvent<HTMLFormElement> )=> {
+    ev.preventDefault()
+    const data = await axios.post("/profile",userData)
+    console.log(data)
+   }
     return (
         <>
-            <h1>Your Profile</h1>
-            <span>Hey {data?.email}</span>
+        <span>This is a Profile section</span>
+        <span>wellcome {user?.email}</span>
+        <form onSubmit={updateForm} >
+            <label className=" block" >Name</label>
+            <input type='text' value={userData.name}  name='name' onChange={setChange} placeholder='Name' className=" shadow-md border mx-4 px-2" />
+            <label className=" block" >Contact Number</label>
+            <input type='tel' value={userData.contact} name='contact' onChange={setChange}  placeholder='phone' className=" shadow-md border mx-4 px-2" />
+            <label className=" block" >Address</label>
+            <input type='text' value={userData.address} name='address' onChange={setChange}  placeholder='Address' className=" shadow-md border mx-4 px-2" />
+            <label className=" block" >city</label>
+            <input type='text' value={userData.city} name='city' onChange={setChange}  placeholder='city' className=" shadow-md border mx-4 px-2" />
+            <button>Sumbit</button>
+        </form>
         </>
-    );
+    )
 }

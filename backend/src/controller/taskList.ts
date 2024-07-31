@@ -63,22 +63,30 @@ const loggin = async (req: Request, res: Response) => {
         console.error("Error logging in:", err);
         return res.status(500).json({ msg: "Error logging in" });
     }
-};
-
-const getProfile = async (req: Request, res: Response) => {
+}
+const updateProfile= async (req: Request, res: Response) => {
     try {
-        const { token } = req.cookies;
-
+        if (!jwtSecret) {
+            throw new Error("JWT_SECRET environment variable is not defined");
+        }
+       const {token}=  req.cookies
+        const data= req.body
+        
         if (!token) {
             return res.status(401).json({ msg: "No token provided" });
         }
 
-        jwt.verify(token, jwtSecret, (err, user) => {
+        jwt.verify(token, jwtSecret, async(err: Error | null, user: any) => {
             if (err || !user) {
                 return res.status(401).json({ msg: "Invalid token", error: err?.message });
             }
-
-            return res.status(200).json({ data: user });
+            
+           const Duser=await  NUser.findById(user.id)
+           if(Duser.email === user.email){
+            Duser.set(data)
+            await Duser.save()
+            res.status(200).json(Duser)
+           }
         });
     } catch (err) {
         console.error("Error getting user profile:", err);
@@ -87,3 +95,9 @@ const getProfile = async (req: Request, res: Response) => {
 };
 
 export { createUser, loggin, getProfile };
+
+module.exports= {
+    createUser,
+    updateProfile,
+    loggin,
+}

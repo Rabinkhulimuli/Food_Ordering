@@ -5,9 +5,10 @@ import { UserContext,UserContextType } from "../userContext/userContextProvide"
 interface changeType{
     change:boolean  
     setChange: React.Dispatch<React.SetStateAction<boolean>>
+    handleLogout:()=> void
   }
-export default function MobNavbar({change,setChange}:changeType){
-    const{login,setLogin}=useContext<UserContextType>(UserContext)
+export default function MobNavbar({change,setChange,handleLogout}:changeType){
+    const{login}=useContext<UserContextType>(UserContext)
     return (
         <>
         <div className=" relative  md:hidden flex-col w-1/2 right-0 ml-auto ">
@@ -29,7 +30,7 @@ export default function MobNavbar({change,setChange}:changeType){
                   >
                     Profile
                   </Link>
-                  <button onClick={()=> setLogin(false)} className="bg-yellow-200 w-full text-center hover:bg-red-500 my-1">
+                  <button onClick={handleLogout} className="bg-yellow-200 w-full text-center hover:bg-red-500 my-1">
                     Log Out
                   </button>
                 </div>

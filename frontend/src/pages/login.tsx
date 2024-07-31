@@ -15,7 +15,7 @@ export interface formData {
 }
 export default function Login() {
   const [data1, setData] = useState<formData>({ email: " ", password: "" });
-  const [er,setEr]=useState<string>('')
+ 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setData((prev) => {
@@ -52,7 +52,7 @@ export default function Login() {
      
       <form onSubmit={handleSubmit} className=" bg-indigo-200 px-6 py-8">
         <div>
-           <span className=" text-lg text-red-500 font-semibold w-full text-center bg-red-50" >{er} </span>
+           
            <div></div>
           <label>Email</label>
           <input

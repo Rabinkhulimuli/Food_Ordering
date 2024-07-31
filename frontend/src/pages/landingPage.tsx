@@ -6,6 +6,7 @@ import {
 } from "../userContext/userContextProvide";
 import MobNavbar from "./mobNavbar";
 import Footer from "./footer";
+import axios from 'axios'
 type Props = {
   children: React.ReactNode;
 };
@@ -13,6 +14,15 @@ type Props = {
 export default function LandingPage({ children }: Props) {
   const [change, setChange] = useState(false);
   const { login, setLogin } = useContext<UserContextType>(UserContext);
+  const handleLogout= ()=> {
+    try{
+      axios.post('/logout')
+      setLogin(false)
+    }catch(err){
+      console.log("error loggin out")
+    }
+    
+  }
   return (
     <>
       <div className=" ">
@@ -37,7 +47,7 @@ export default function LandingPage({ children }: Props) {
           {login && (
             <div className="hidden md:block ">
               <button
-                onClick={() => setLogin(false)}
+                onClick={handleLogout}
                 className="p-4 text-lg font-bold text-orange-700 rounded-xl hover:bg-gray-500"
               >
                 Log Out
@@ -54,7 +64,7 @@ export default function LandingPage({ children }: Props) {
           </div>
           
         </div>
-        <MobNavbar change={change} setChange={setChange} />
+        <MobNavbar change={change} setChange={setChange} handleLogout={handleLogout}/>
       </div>
 
       <div

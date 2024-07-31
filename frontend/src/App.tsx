@@ -3,6 +3,7 @@ import LandingPage from "./pages/landingPage";
 import Profile from "./pages/profile";
 import Login from "./pages/login";
 import SubPage from "./pages/subLandinPage";
+import ProtectedRoute from "./form/protectedRoute";
 
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
@@ -24,7 +25,10 @@ function App() {
                 </LandingPage>
               }
             />
-            <Route path="/profile" element={<Profile />} />
+            <Route element={<ProtectedRoute/>} >
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+            
             <Route path='/register' element={<Register/>} />
             <Route path="/login" element={<Login />} />
           </Routes>

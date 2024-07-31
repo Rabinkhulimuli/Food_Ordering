@@ -3,9 +3,12 @@ import { validateMyUserRequest } from '../middleware/validation'
 const router=express.Router()
 const {updateProfile,
     createUser,
-    loggin
+    loggin,
+    getProfile,
+    logOut
 } =require('../controller/taskList')
 router.route('/my-user').post(createUser)
 router.route('/user-loggin').post(loggin)
-router.route('/profile').post(validateMyUserRequest,updateProfile)
+router.route('/profile').post(validateMyUserRequest,updateProfile).get(getProfile)
+router.route('/logout').post(logOut)
 module.exports=router

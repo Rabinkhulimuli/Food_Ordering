@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-const NUser = require("../model/modelSchema");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import NUser from '../model/modelSchema';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = process.env.JWT_SECRET as string;
@@ -44,17 +46,14 @@ const loggin = async (req: Request, res: Response) => {
       return res.status(401).json({ msg: "Incorrect password" });
     }
 
-    jwt.sign({ email: user.email, id: user._id }, jwtSecret, {}, (err: Error, token: string) => {
-      if (err) {
-        throw err;
-      }
+    const token=jwt.sign({email:user.email,id:user._id},jwtSecret)
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: true,
         sameSite: "none",
       }).status(200).json({ email: user.email, id: user._id });
-    });
+    ;
   } catch (err) {
     console.error("Error logging in:", err);
     res.status(500).json({ msg: "Error logging in" });
@@ -123,12 +122,12 @@ const getProfile = async (req: Request, res: Response) => {
 };
 
 const logOut = (req: Request, res: Response) => {
-  res.cookie("token", " ", { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict" })
+  res.cookie("token", "", { httpOnly: true, secure: true, sameSite: "strict" })
     .status(200)
     .send();
 };
 
-module.exports = {
+export {
   createUser,
   updateProfile,
   loggin,

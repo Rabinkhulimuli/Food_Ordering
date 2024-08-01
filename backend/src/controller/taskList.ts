@@ -51,8 +51,8 @@ const loggin = async (req: Request, res: Response) => {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none",
       }).status(200).json({ email: user.email, id: user._id });
     });
   } catch (err) {

@@ -8,7 +8,8 @@ import ProtectedRoute from "./form/protectedRoute";
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
 import axios from "axios";
-axios.defaults.baseURL="http://localhost:5000/user"
+const apiUrl= import.meta.env.VITE_API_BASE_URL
+axios.defaults.baseURL=apiUrl
 axios.defaults.withCredentials=true
 function App() {
   return (

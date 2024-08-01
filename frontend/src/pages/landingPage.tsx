@@ -16,7 +16,7 @@ export default function LandingPage({ children }: Props) {
   const { login, setLogin } = useContext<UserContextType>(UserContext);
   const handleLogout= ()=> {
     try{
-      axios.post('/logout')
+      axios.post('/user/logout')
       setLogin(false)
     }catch(err){
       console.log("error loggin out")

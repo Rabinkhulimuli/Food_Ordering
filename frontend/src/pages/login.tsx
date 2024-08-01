@@ -36,7 +36,7 @@ export default function Login() {
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try{
-      const {data}= await axios.post('/user-loggin',data1)
+      const {data}= await axios.post('/user/user-loggin',data1)
       console.log(data)
       setUser(data)
       setLogin(true)

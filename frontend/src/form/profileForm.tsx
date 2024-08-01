@@ -15,7 +15,7 @@ export default function ProfileForm() {
   const { user, setUser } = useContext<UserContextType>(UserContext);
     useEffect(()=> {
         const profile= async()=> {
-            const {data}= await axios.get('/profile')
+            const {data}= await axios.get('/user/profile')
             setUser(data)
             setUserData((prev)=> {
 
@@ -41,7 +41,7 @@ export default function ProfileForm() {
   };
   const updateForm = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
-    const data = await axios.post("/profile", userData);
+    const data = await axios.post("/user/profile", userData);
     console.log(data);
   };
   return (

@@ -10,7 +10,7 @@ export default function  ProtectedRoute(){
     useEffect(()=> {
         try{
       const load=async()=> {
-            const {data}= await axios.get('/profile')
+            const {data}= await axios.get('/user/profile')
             setUser(data)
             setLogin(true)
 

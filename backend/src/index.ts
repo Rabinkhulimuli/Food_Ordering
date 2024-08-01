@@ -8,7 +8,7 @@ import connectDB from './db/connectDb'
 const PORT=process.env.PORT 
 import {Request,Response} from 'express'
 app.use(cors({
-  origin: 'http://localhost:5173', 
+  origin: process.env.FRONTEND_API_URL as string, 
   credentials: true, 
 }))
 app.use(cookieParser())

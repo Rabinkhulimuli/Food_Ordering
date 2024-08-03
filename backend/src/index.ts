@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import dotenv from 'dotenv'
 const app = express();
 import task from "./router/task"
+import myRestaurantRoute from './router/myResturantRoute'
 import connectDB from './db/connectDb'
 const PORT=process.env.PORT 
 import {Request,Response} from 'express'
@@ -18,6 +19,7 @@ app.use(cookieParser())
 
 
 app.use("/user", task);
+app.use('/api/my/restaurant',myRestaurantRoute)
 app.get('/health',(req:Request,res:Response)=> {
   res.status(200).send({message:"health OK"})
 })

@@ -36,9 +36,9 @@ export default function Login() {
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try{
-      const {data}= await axios.post('/user/user-loggin',data1)
-      console.log(data)
-      setUser(data)
+      const data2= await axios.post('/user/user-loggin',data1)
+      console.log(data2)
+      setUser(data2.data)
       setLogin(true)
     }catch(err){
       console.log("error logging in")

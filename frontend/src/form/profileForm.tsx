@@ -16,6 +16,7 @@ export default function ProfileForm() {
     useEffect(()=> {
         const profile= async()=> {
             const {data}= await axios.get('/user/profile')
+           
             setUser(data)
             setUserData((prev)=> {
 
@@ -50,6 +51,7 @@ export default function ProfileForm() {
         <div className="shadow bg-gray-100 px-4">
           <span className="block text-xl font-bold ">User Profile Form</span>
           <span>view and change your profile information</span>
+          <div></div>
         </div>
         <label>Email</label>
         <input type="text" value={user.email} disabled className=" mx-4 shadow-xl w-full bg-red-200 px-8 font-bold "  />

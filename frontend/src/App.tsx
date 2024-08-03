@@ -4,10 +4,12 @@ import Profile from "./pages/profile";
 import Login from "./pages/login";
 import SubPage from "./pages/subLandinPage";
 import ProtectedRoute from "./form/protectedRoute";
-
+import AppQuery from "./query/appQuery";
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
 import axios from "axios";
+
+
 const apiUrl= import.meta.env.VITE_API_BASE_URL
 axios.defaults.baseURL=apiUrl
 axios.defaults.withCredentials=true
@@ -17,7 +19,9 @@ function App() {
      
         <UserContextProvider>
         <BrowserRouter>
+        <AppQuery>
           <Routes>
+            
             <Route
               path="/"
               element={
@@ -32,7 +36,9 @@ function App() {
             
             <Route path='/register' element={<Register/>} />
             <Route path="/login" element={<Login />} />
+           
           </Routes>
+          </AppQuery>
           </BrowserRouter>
         </UserContextProvider>
     

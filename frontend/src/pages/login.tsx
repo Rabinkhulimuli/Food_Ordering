@@ -6,7 +6,12 @@ import {
   UserContext,
   UserContextType,
 } from "../userContext/userContextProvide";
-import axios from  'axios'
+
+import { useMutation} from "@tanstack/react-query";
+
+import {
+  loginUser
+} from '../api/apiList'
 
 export interface formData {
   email: string;
@@ -33,17 +38,30 @@ export default function Login() {
     }
   }, [login, navigate]);
 
+    const {mutate}= useMutation({
+  mutationFn:loginUser,
+  mutationKey:["login"],
+  onSuccess:(data)=> {
+    setLogin(true)
+    setUser(data)
+  }
+
+})
   const handleSubmit = async(event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try{
+    mutate(data1)
+    
+   /*  try{
       const data2= await axios.post('/user/user-loggin',data1)
       console.log(data2)
       setUser(data2.data)
       setLogin(true)
     }catch(err){
       console.log("error logging in")
-    }
+    } */
   };
+
+
   return (
     <>
       <h2 className=" w-full text-center text-2xl font-black shadow">

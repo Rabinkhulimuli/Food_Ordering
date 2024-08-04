@@ -107,7 +107,7 @@ const getProfile = async (req: Request, res: Response) => {
         return res.status(404).json({ msg: "User not found" });
       }
 
-      res.status(200).json({
+      return res.status(200).json({
         name: Duser?.name,
         email: Duser.email,
         city: Duser?.city,
@@ -117,12 +117,12 @@ const getProfile = async (req: Request, res: Response) => {
     });
   } catch (err) {
     console.error("Error getting user profile:", err);
-    res.status(500).json({ msg: "Error getting user profile" });
+    return res.status(500).json({ msg: "Error getting user profile" });
   }
 };
 
 const logOut = (req: Request, res: Response) => {
-  res.cookie("token", "", { httpOnly: true, secure: true, sameSite: "strict" })
+  return res.cookie("token", " ", { httpOnly: true, secure: true, sameSite: "strict" })
     .status(200)
     .send();
 };

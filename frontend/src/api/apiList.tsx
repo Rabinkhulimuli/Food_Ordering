@@ -31,6 +31,7 @@ export const postUser=async(data1:formData):Promise<postResponse> => {
         const {data}= await axios.post('/user/my-user',data1)
         return data
     }catch(error){
+        console.log(error)
         throw new Error(error instanceof Error ? error.message : 'An unexpected error occurred');
     }
     
@@ -42,16 +43,32 @@ export const loginUser = async (data1: formData): Promise<loginResponse> => {
 
         return data
     } catch (error) {
-        throw new Error(error instanceof Error ? error.message : 'An unexpected error occurred');
+        if(axios.isAxiosError(error)){
+            const customError=error?.response?.data?.msg||"Unexpected Error"
+            throw new Error(customError)
+        }
+        else{
+            throw new Error("Something went Wrong")
+        }
     }
 };
 
 
 export const getProfile = async (): Promise<profileResponse> => {
-    const {data}= await axios.get('/user/profile')
+    try{
+        const {data}= await axios.get('/user/profile')
     return data
+    }catch(err){
+        throw new Error("Error getting profile")
+    }
+    
   };
   export const updateProfile= async(data:profileUpdateResponse):Promise<profileUpdateResponse> => {
-    await axios.post('/user/profile',data)
+    try{
+        await axios.post('/user/profile',data)
     return data
+    }catch(err){
+        throw new Error("Error updating profile ")
+    }
+    
   }

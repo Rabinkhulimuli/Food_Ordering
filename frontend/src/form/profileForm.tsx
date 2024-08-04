@@ -5,10 +5,10 @@ import { UserContext, UserContextType } from "../userContext/userContextProvide"
 import { getProfile, updateProfile } from "../api/apiList";
 
 interface UserD {
-  name: string;
-  contact: number;
-  address: string;
-  city: string;
+  name?: string;
+  contact?: number;
+  address?: string;
+  city?: string;
 }
 
 export default function ProfileForm() {
@@ -17,7 +17,7 @@ export default function ProfileForm() {
 
   const { isLoading, isSuccess, data } = useQuery({
     queryKey: ["getprofile"],
-   
+    enabled:!!user,
     queryFn: getProfile,
   });
 
@@ -40,9 +40,17 @@ export default function ProfileForm() {
     address: "",
     city: "",
   });
-
+  useEffect(()=> {
+    if(isSuccess && data){
+      console.log("setting user data")
+      setUserData((prev)=>{
+        return {...prev,name:data?.name,contact:data?.contact,address:data?.address,city:data?.city}
+      } )
+    }
+  },[data,isSuccess])
   const setChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = ev.target;
+    console.log("form data changing")
     setUserData((prev) => ({
       ...prev,
       [name]: value,
@@ -55,23 +63,24 @@ export default function ProfileForm() {
     navigate("/");
   };
 
-  if (isLoading) {
-    return <div>Loading ...</div>;
-  }
+  
 
   return (
     <div className="bg-gray-200 px-4">
       <div className="shadow bg-gray-100 px-4">
+        <button onClick={()=> navigate('/')} className=" bg-red-800 text-white text-xl font-bold px-4 rounded-lg" >Go to homepage ..</button>
         <span className="block text-xl font-bold">User Profile Form</span>
         <span>View and change your profile information</span>
       </div>
       <label>Email</label>
       <input
         type="text"
-        value={user?.email || ""}
+        value={data?.email || ""}
         disabled
-        className="mx-4 shadow-xl w-full bg-red-200 px-8 font-bold"
+        className="mx-4 shadow-xl w-full bg-red-200 px-8 font-bold shadow-lg"
       />
+      {isLoading && <div className=" w-full text-center bg-red-200 m-4 shadow-md" >Loading ...</div>}
+      
       <form onSubmit={updateForm}>
         <label className="block">Name</label>
         <input

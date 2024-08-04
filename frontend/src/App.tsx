@@ -18,8 +18,9 @@ function App() {
     
      
         <UserContextProvider>
+           <AppQuery>
         <BrowserRouter>
-        <AppQuery>
+       
           <Routes>
             
             <Route
@@ -38,8 +39,9 @@ function App() {
             <Route path="/login" element={<Login />} />
            
           </Routes>
-          </AppQuery>
+          
           </BrowserRouter>
+          </AppQuery>
         </UserContextProvider>
     
     

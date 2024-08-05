@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import { createResturant } from '../controller/resturantController'
-
+import { validateMyRestaurantRequest } from '../middleware/validation'
 const router= express.Router()
 const storage= multer.memoryStorage()
 const upload=multer({
@@ -11,6 +11,6 @@ const upload=multer({
     }
 })
 // /api/my/user
-router.route('/').post(upload.single("imageFile"),createResturant)
+router.route('/').post(upload.single("imageFile"),validateMyRestaurantRequest,createResturant)
 
 export default router

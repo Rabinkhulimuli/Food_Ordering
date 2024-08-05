@@ -7,6 +7,7 @@ import ProtectedRoute from "./form/protectedRoute";
 import AppQuery from "./query/appQuery";
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
+import RestaurantForm from "./form/restaurant/restaurantForm";
 import axios from "axios";
 
 
@@ -32,11 +33,12 @@ function App() {
               }
             />
             <Route element={<ProtectedRoute/>} >
-              <Route path="/profile" element={<Profile />} />
+              <Route path="profile" element={<Profile />} />
+              
             </Route>
-            
-            <Route path='/register' element={<Register/>} />
-            <Route path="/login" element={<Login />} />
+            <Route path="my-restaurant" element={<RestaurantForm/>}/>
+            <Route path='register' element={<Register/>} />
+            <Route path="login" element={<Login />} />
            
           </Routes>
           

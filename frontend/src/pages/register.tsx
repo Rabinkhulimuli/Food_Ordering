@@ -35,7 +35,7 @@ export default function Register() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      mutateAsync(data1);
+      await mutateAsync(data1);
     } catch (err) {
       console.log(err);
     }
@@ -89,7 +89,7 @@ export default function Register() {
               className=" bg-teal-500 my-4 w-full text-2xl font-bold rounded-lg text-white py-1 hover:bg-teal-800 "
               disabled={isPending ? true : false}
             >
-              {isPending ? "Signing up" : "Sign Up"}
+              {isPending ? "Registering ..." : "Sign Up"}
             </button>
             <span className=" flex font-bold  items-center justify-center ">
               Already have an account ?{" "}

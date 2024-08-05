@@ -92,7 +92,7 @@ export default function Login() {
         </div>
         <div className=" w-full text-center tracking-tight text-red-600 font-bold text-lg mt-1 " >{isError? (JSON.stringify(error.message)): '' } </div>
         <button className=" bg-teal-500 my-4 w-full text-2xl font-bold rounded-lg text-white py-1 hover:bg-teal-800 " disabled={isPending? true:false} >
-          {isPending? "Loggin in":"Log In"}
+          {isPending? "Loggin in ...":"Log In"}
         </button>
         <span className=" flex font-bold  items-center justify-center " >Dont have an account ? <Link to='/register' className="underline  mx-1 text-red-500"> Register</Link> </span>
       </form>

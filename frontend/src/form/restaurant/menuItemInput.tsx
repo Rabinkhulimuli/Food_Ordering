@@ -8,16 +8,16 @@ export default function MenuItemInput({index,removeMenuItem}:Props){
     return(
 
         <>
-            <div className=" flex gap-5 items-center justify-center shadow-lg" >
+            <div className=" flex gap-2  my-2" >
             <div >
                 <Controller
                 name={`menuItems.${index}.name`}
                 control={control}
                 render={({field})=> (
-                    <div>
+                    <div className="flex flex-col gap-2 ">
                         <label>Name</label>
                         {errors.menuItems &&<p>{`${errors.menuItems.message}`}</p>}
-                        <input {...field} placeholder="pizza" className=" border border-black rounded mx-2 px-1" />
+                        <input {...field} placeholder="pizza" className=" border block border-black rounded  h-10 px-1" />
                     </div>
                 )}
              />
@@ -27,16 +27,16 @@ export default function MenuItemInput({index,removeMenuItem}:Props){
                     name={`menuItems.${index}.price`}
                     control={control}
                     render={({field})=> (
-                            <div>
+                            <div className="flex flex-col gap-2 ">
                                 <label>Price ($) </label>
                                 {errors.menuItems && <p>{`${errors.menuItems.message}`}</p>}
-                                <input {...field} placeholder="8.88" className=" border border-black rounded mx-2 px-1" />
+                                <input {...field} placeholder="8.88" className=" border block border-black rounded  h-10 px-1" />
 
                             </div>
                     )}
                 />
             </div>
-             <div onClick={ removeMenuItem} className=" bg-orange-600 w-16 h-8 text-center font-bold text-2xl   rounded-lg" >X</div>
+             <div onClick={ removeMenuItem} className=" bg-orange-600 px-4 py-2 text-white mt-8  text-center font-bold h-10 cursor-pointer rounded-lg" >Remove</div>
             </div>
            
         </>

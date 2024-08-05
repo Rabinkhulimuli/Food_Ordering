@@ -24,14 +24,15 @@ export default function MobNavbar({change,setChange,handleLogout}:changeType){
               >
                 close
               </button>
-              <Link to='/my-restaurant' className=" block w-full text-center font-bold text-gray-100 py-2 text-lg capitalize hover:bg-orange-500  border-b-4 border-orange-800 " >My restaurant</Link>
+              
               {login && (
                 
                 <div className="w-full">
-                  <Link to='/my-restaurant' className=" block w-full text-center font-bold text-gray-100 py-2 text-lg capitalize hover:bg-orange-500  border-b-4 border-orange-800 " >My restaurant</Link>
+                  <Link to='/my-restaurant' onClick={() => setChange(() => false)} className=" block w-full text-center font-bold text-gray-100 py-2 text-lg capitalize hover:bg-orange-500  border-b-4 border-orange-800 " >My restaurant</Link>
                   <Link
                     className="  block w-full text-center hover:bg-orange-500  font-bold text-gray-100 py-2 text-lg capitalize border-b-4 border-orange-800"
                     to="/profile"
+                    onClick={() => setChange(() => false)}
                   >
                     Profile
                   </Link>
@@ -41,7 +42,7 @@ export default function MobNavbar({change,setChange,handleLogout}:changeType){
                 </div>
               )}
               {!login && (
-                <Link to="/login" className="  w-full text-center hover:bg-orange-500  font-bold text-gray-100 py-2 text-lg capitalize border-b-4 border-orange-800">
+                <Link to="/login" onClick={() => setChange(() => false)} className="  w-full text-center hover:bg-orange-500  font-bold text-gray-100 py-2 text-lg capitalize border-b-4 border-orange-800">
                   Log In
                 </Link>
               )}

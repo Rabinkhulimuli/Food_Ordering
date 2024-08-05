@@ -7,7 +7,7 @@ export default function Cuisines() {
   return (
     <div>
       <div className=" my-4">
-        <h2 className=" text-3xl font-bold " >Cuisines</h2>
+        <h2 className=" text-2xl font-bold " >Cuisines</h2>
       <span className=" text-gray-500" >Select the cuisine that your restaurant serves</span>
       </div>
       

@@ -1,12 +1,12 @@
 import { useFormContext, Controller } from "react-hook-form";
 
 export default function DetailRerstro() {
-  const { control } = useFormContext();
+  const { control,formState:{errors} } = useFormContext();
   return (
     <>
-      <div className=" bg-red-200  px-4 space-y-2" >
-        <div>Details</div>
-        <span>Enter the details about your restaurant</span>
+      <div>
+        <h2 className=" text-2xl font-bold ">Details</h2>
+        <span className=" text-gray-500">Enter the details about your restaurant</span>
         <Controller
           name="restaurantName"
           control={control}
@@ -18,6 +18,7 @@ export default function DetailRerstro() {
                 placeholder="Pizza Restro"
                 className=" shadow-md block w-full"
               />
+              {errors.restaurantName && <p className=" text-red-800 text-lg capitalize" >{`${errors.restaurantName.message}`} </p>}
             </div>
           )}
         />
@@ -30,6 +31,7 @@ export default function DetailRerstro() {
                     <div className=" flex-1" >
                         <label>City</label>
                         <input {...field} className=" shadow-md block border w-full " />
+                        {errors.city && <p className=" text-red-800 text-lg capitalize">{`${errors.city.message}`} </p>}
                          </div>
                 )}
 
@@ -42,6 +44,7 @@ export default function DetailRerstro() {
                     <div className="flex-1"> 
                         <label>Country</label>
                         <input {...field} className=" shadow-md block border w-full " />
+                        {errors.country && <p className=" text-red-800 text-lg capitalize">{`${errors.country.message}`} </p>}
                     </div>
                 )}
             />
@@ -53,16 +56,18 @@ export default function DetailRerstro() {
                 <div> 
                     <label>Delivery Price ($) </label>
                     <input {...field} placeholder="1.88" className=" shadow-md block border  " />
+                    {errors.deliveryPrice && <p className=" text-red-800 text-lg capitalize">{`${errors.deliveryPrice.message}`} </p>}
                 </div>
             )}
         />
         <Controller 
-            name="deliveryTime"
+            name="estimatedDeliveryTime"
             control={control}
             render={({field})=> (
                 <div>
                     <label>Estimated Delivery Time (minutes) </label>
                     <input {...field} placeholder="30" className=" shadow-md block border  " />
+                      {errors.estimatedDeliveryTime && <p className=" text-red-800 text-lg capitalize">{`${errors.estimatedDeliveryTime.message}`} </p>}
                     </div>
             )}
         />

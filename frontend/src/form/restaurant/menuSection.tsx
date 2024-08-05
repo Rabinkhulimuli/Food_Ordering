@@ -8,7 +8,8 @@ export default function MenuSection(){
     })
     return (
         <>
-            <h2>Menu Section</h2>
+            <h2 className=" text-2xl font-bold ">Menu</h2>
+            <span className=" text-gray-500" >Create your menu and give each item a name and a price</span>
             <Controller
             name="menuItems"
             control={control}
@@ -25,10 +26,12 @@ export default function MenuSection(){
                 </div>
             )}
             />
-            <button onClick={()=> append({
+            <div onClick={()=> append({
                 name: "",
                 price:""
-            })} >Add Menu Items</button>
+            })}  
+            className=" bg-black text-white w-fit px-4 py-2 rounded-lg cursor-pointer"
+            >Add Menu Items</div>
         </>
     )
 }

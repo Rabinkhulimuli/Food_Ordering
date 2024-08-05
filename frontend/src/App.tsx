@@ -8,45 +8,38 @@ import AppQuery from "./query/appQuery";
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
 import RestaurantForm from "./form/restaurant/restaurantForm";
+import Layout from "./layoutPage/layout";
 import axios from "axios";
 
-
-const apiUrl= import.meta.env.VITE_API_BASE_URL
-axios.defaults.baseURL=apiUrl
-axios.defaults.withCredentials=true
+const apiUrl = import.meta.env.VITE_API_BASE_URL;
+axios.defaults.baseURL = apiUrl;
+axios.defaults.withCredentials = true;
 function App() {
   return (
-    
-     
-        <UserContextProvider>
-           <AppQuery>
+    <UserContextProvider>
+      <AppQuery>
         <BrowserRouter>
-       
           <Routes>
-            
             <Route
               path="/"
               element={
                 <LandingPage>
-                  <SubPage/>
+                  <SubPage />
                 </LandingPage>
               }
             />
-            <Route element={<ProtectedRoute/>} >
-              <Route path="profile" element={<Profile />} />
-              
+            <Route element={<Layout />}>
+              <Route element={<ProtectedRoute />}>
+                <Route path="profile" element={<Profile />} />
+              </Route>
+              <Route path="my-restaurant" element={<RestaurantForm />} />
+              <Route path="register" element={<Register />} />
+              <Route path="login" element={<Login />} />
             </Route>
-            <Route path="my-restaurant" element={<RestaurantForm/>}/>
-            <Route path='register' element={<Register/>} />
-            <Route path="login" element={<Login />} />
-           
           </Routes>
-          
-          </BrowserRouter>
-          </AppQuery>
-        </UserContextProvider>
-    
-    
+        </BrowserRouter>
+      </AppQuery>
+    </UserContextProvider>
   );
 }
 

@@ -26,6 +26,8 @@ export interface UserContextType {
     setLogin: React.Dispatch<React.SetStateAction<boolean>>;
     token: string | null;
     setToken: React.Dispatch<React.SetStateAction<string | null>>;
+    change:boolean;
+    setChange:React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -42,6 +44,8 @@ export const UserContext = createContext<UserContextType>({
     setLogin: () => {},
     token: null,
     setToken: () => {},
+    change:false,
+    setChange:()=> {}
 });
 
 export default function UserContextProvider({ children }: UserContextProviderProps) {
@@ -62,9 +66,10 @@ export default function UserContextProvider({ children }: UserContextProviderPro
         name: ''
     });
     const [token, setToken] = useState<string | null>(null);
+    const [change,setChange]=useState(false)
 
     return (
-        <UserContext.Provider value={{ login, setLogin, user, setUser, token, setToken }}>
+        <UserContext.Provider value={{ login, setLogin, user, setUser, token, setToken ,change,setChange}}>
             {children}
         </UserContext.Provider>
     );

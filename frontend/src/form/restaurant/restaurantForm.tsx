@@ -35,7 +35,7 @@ const formSchema = z.object({
   ),
   imageFile: z.instanceof(File, { message: "image is required" }),
 });
-type restaurantFormData = z.infer<typeof formSchema>;
+export type restaurantFormData = z.infer<typeof formSchema>;
 type Props = {
   onSave: (restaurantFormData: FormData) => void;
   isLoading: boolean;
@@ -48,7 +48,24 @@ export default function RestaurantForm({ onSave, isLoading }: Props) {
       menuItems: [{ name: "", price: 0 }],
     },
   });
-  const onSubmit = (formDataJson: restaurantFormData) => {};
+  const onSubmit = (formDataJson: restaurantFormData) => {
+    const formData = new FormData()
+    formData.append("restaurantName",formDataJson.restaurantName)
+    formData.append("city",formDataJson.city)
+    formData.append("country",formDataJson.country)
+    formData.append("deliveryPrice",(formDataJson.deliveryPrice * 100).toString())
+    formData.append("estimatedDeliveryTime",formDataJson.estimatedDeliveryTime.toString())
+    formDataJson.cuisines.forEach((cuisine,index)=> {
+      formData.append(`cuisines[${index}]`,cuisine)
+
+    })
+    formDataJson.menuItems.forEach((item,index)=> {
+      formData.append(`menuItems[${index}][name]`,item.name.toString())
+      formData.append(`menuItems[${index}][price]`,(item.price * 100).toString())
+    })
+    formData.append(`imageFile`,formDataJson.imageFile)
+    onSave(formData)
+  };
   return (
     <>
       

@@ -11,10 +11,10 @@ export default function MobNavbar({change,setChange,handleLogout}:changeType){
     const{login}=useContext<UserContextType>(UserContext)
     return (
         <>
-        <div className=" relative  md:hidden flex-col w-1/2 right-0 ml-auto ">
+        <div  className=" relative md:hidden flex-col w-1/2 right-0 ml-auto ">
           
           {change && (
-            <div className="  w-full absolute z-10 -mt-32 py-4 bg-gray-500 flex flex-col items-center md:hidden border-l-4 border-solid border-orange-700 h-screen ">
+            <div className="  w-full absolute z-10 -top-32  py-4 bg-gray-500 flex flex-col items-center md:hidden border-l-4 border-solid border-orange-700  h-screen ">
               
               <div className="h-16 py-16 bg-orange-600 text-white w-full flex items-center justify-center text-xl  text-center tracking-tight font-bold capitalize" >Wellcome to EatMuch.com </div>
              

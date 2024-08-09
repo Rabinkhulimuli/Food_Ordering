@@ -13,10 +13,17 @@ export default function ImageSection(){
                     <Controller 
                         name="imageFile"
                         control={control}
-                        render={({field})=> (
+                        render={({field:{onChange,ref,name}})=> (
                             <div className=" w-1/2 ">
-                                <input type="file" {...field} accept=".jpg,.jpeg,.png"
-                                onChange={(event)=> field.onChange(event.target.files ? event.target.files[0]:null)}
+                                <input type="file" 
+                                name={name}
+                                ref={ref}
+                                accept=".jpg,.jpeg,.png"
+                                onChange={(event)=> {
+                                    onChange(event.target.files ? event.target.files[0]:null)
+                                console.log("image file is uploading")}
+
+                                }
                                 className=" "
                                 />
                                 {errors.imageFile &&<p>{`${errors.imageFile.message}`} </p>}

@@ -1,9 +1,8 @@
 import axios from 'axios'
 import { restaurantType } from '../type'
-import { restaurantFormData } from '../form/restaurant/restaurantForm'
 import { useMutation } from '@tanstack/react-query'
-export const useCreateMyRestaurant= async() => {
-    const createMyRestro=async(restroFormData: restaurantFormData):Promise<restaurantType> => {
+export const useCreateMyRestaurant= () => {
+    const createMyRestro=async(restroFormData: FormData):Promise<restaurantType> => {
     try {
         const response =await axios.post("/api/my/restaurant",restroFormData,{
             headers:{
@@ -16,7 +15,7 @@ export const useCreateMyRestaurant= async() => {
         throw new Error("Error creating restaurant")
     }
 }
-    const {mutate,isPending:isLoading,isError,isSuccess}= useMutation({
+    const {mutate:createRestro,isPending:isLoading,isError,isSuccess}= useMutation({
         mutationFn:createMyRestro,
         mutationKey:["createRerstaurant"]
     })
@@ -26,5 +25,5 @@ export const useCreateMyRestaurant= async() => {
     if(isError){
         console.log("error creating Restaurant ")
     }
-    return {mutate,isLoading}
+    return {createRestro,isLoading}
 }

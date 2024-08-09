@@ -7,7 +7,8 @@ import ProtectedRoute from "./form/protectedRoute";
 import AppQuery from "./query/appQuery";
 import UserContextProvider from "./userContext/userContextProvide";
 import Register from "./pages/register";
-import RestaurantForm from "./form/restaurant/restaurantForm";
+
+import ManageRestaurantPage from "./pages/manageRestaurant";
 import Layout from "./layoutPage/layout";
 import axios from "axios";
 
@@ -32,7 +33,7 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="profile" element={<Profile />} />
               </Route>
-              <Route path="my-restaurant" element={<RestaurantForm />} />
+              <Route path="my-restaurant" element={<ManageRestaurantPage />} />
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
             </Route>

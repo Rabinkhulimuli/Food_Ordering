@@ -45,13 +45,7 @@ export default function Register() {
   }
   return (
     <>
-      <button
-        onClick={() => navigate("/")}
-        className="px-4 bg-black rounded-xl text-white m-4 fixed "
-      >
-        {" "}
-        X Back
-      </button>
+      
       <div className="w-full h-screen flex  items-center justify-center">
         <div className="  w-80  rounded-xl border border-4 shadow-lg bg-orange-50">
           <h2 className=" w-full mt-20 text-center  text-2xl font-black text-orange-700 border-b-2 border-orange-800">

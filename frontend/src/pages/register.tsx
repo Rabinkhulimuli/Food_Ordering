@@ -48,7 +48,7 @@ export default function Register() {
       
       <div className="w-full h-screen flex  items-center justify-center">
         <div className="  w-80  rounded-xl border border-4 shadow-lg bg-orange-50">
-          <h2 className=" w-full mt-20 text-center  text-2xl font-black text-orange-700 border-b-2 border-orange-800">
+          <h2 className=" w-full bg-white rounded-2xl shadow-xl py-8 text-center  text-2xl font-black text-orange-700 border-b-2 border-orange-800">
             Create a new account
           </h2>
 
@@ -83,7 +83,7 @@ export default function Register() {
               className=" bg-teal-500 my-4 w-full text-2xl font-bold rounded-lg text-white py-1 hover:bg-teal-800 "
               disabled={isPending ? true : false}
             >
-              {isPending ? "Registering ..." : "Sign Up"}
+              {isPending ?  <span>Sign.. <img  className="w-6 animate-spin   inline mx-2" src="/loading.png"/> </span> : "Sign Up"}
             </button>
             <span className=" flex font-bold  items-center justify-center ">
               Already have an account ?{" "}

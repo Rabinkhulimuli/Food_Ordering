@@ -5,8 +5,8 @@ type Props ={
 }
 export default function MenuItemInput({index,removeMenuItem}:Props){
     const {control,formState:{errors}}= useFormContext()
-    
-    
+    const menuItemsError= Array.isArray(errors?.menuItems) ? errors?.menuItems[index] : undefined
+   
     return(
 
         <>
@@ -18,7 +18,7 @@ export default function MenuItemInput({index,removeMenuItem}:Props){
                 render={({field})=> (
                     <div className="flex flex-col gap-2 ">
                         <label>Name</label>
-                        {errors?.menuItems[`${index}`]?.name &&<p>{`${errors?.menuItems[`${index}`]?.name?.message}`}</p>}
+                        {menuItemsError?.name &&<p>{`${menuItemsError?.name?.message}`}</p>}
                         <input {...field} placeholder="pizza" className=" border block border-black rounded  h-10 px-1" />
                     </div>
                 )}
@@ -32,7 +32,7 @@ export default function MenuItemInput({index,removeMenuItem}:Props){
                     render={({field})=> (
                             <div className="flex flex-col gap-2 " >
                                 <label>Price ($) </label>
-                                {errors?.menuItems[`${index}`]?.price && <p>{`${errors?.menuItems[`${index}`]?.price?.message}`}</p>}
+                                {menuItemsError?.price && <p>{`${menuItemsError?.price?.message}`}</p>}
                                 <input {...field} placeholder="8.88" className=" border block border-black rounded  h-10 px-1" />
 
                             </div>

@@ -52,7 +52,7 @@ const loggin = async (req: Request, res: Response) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
-      }).status(200).json({ email: user.email, id: user._id });
+      }).setHeader('Authorization',`Bearer ${token}`).status(200).json({ email: user.email, id: user._id });
     ;
   } catch (err) {
     console.error("Error logging in:", err);

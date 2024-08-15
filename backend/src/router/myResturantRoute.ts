@@ -10,7 +10,7 @@ const upload=multer({
         fileSize: 5 * 1024 * 1024, //5mb
     }
 })
-// /api/my/user
+// /api/my/restaurant
 router.route('/').post(upload.single("imageFile"),validateMyRestaurantRequest,createResturant)
 
 export default router

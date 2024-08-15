@@ -39,9 +39,10 @@ export const postUser=async(data1:formData):Promise<postResponse> => {
 
 export const loginUser = async (data1: formData): Promise<loginResponse> => {
     try {
-        const {data}= await axios.post('/user/user-loggin',data1);
-
-        return data
+        const response= await axios.post('/user/user-loggin',data1);
+        const token= response.headers['Authorization']?.split(' ')[1]
+        localStorage.setItem("token",token)
+        return response.data
     } catch (error) {
         if(axios.isAxiosError(error)){
             const customError=error?.response?.data?.msg||"Unexpected Error"

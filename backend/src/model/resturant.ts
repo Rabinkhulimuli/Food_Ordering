@@ -14,7 +14,7 @@ const resturantSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId, ref:"NUser"
 
     },
-    resturantName:{
+    restaurantName:{
         type:String,
         required:true
     },

@@ -4,11 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 export const useCreateMyRestaurant= () => {
     const createMyRestro=async(restroFormData: FormData):Promise<restaurantType> => {
     try {
-        const response =await axios.post("/api/my/restaurant",restroFormData,{
-            headers:{
-                Authorization:"is this working or not"
-            }
-        })
+        const response =await axios.post("/api/my/restaurant",restroFormData)
         return response.data
     }catch(err){
         console.log("error creating restaurant")

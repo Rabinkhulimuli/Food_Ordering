@@ -46,13 +46,9 @@ const loggin = async (req: Request, res: Response) => {
       return res.status(401).json({ msg: "Incorrect password" });
     }
 
-    const token=jwt.sign({email:user.email,id:user._id},jwtSecret)
+    const token= jwt.sign({email:user.email,id:user._id},jwtSecret)
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      }).setHeader('Authorization',`Bearer ${token}`).status(200).json({ email: user.email, id: user._id });
+      res.status(200).json({ email: user.email, id: user._id,token: token });
     ;
   } catch (err) {
     console.error("Error logging in:", err);
@@ -62,12 +58,14 @@ const loggin = async (req: Request, res: Response) => {
 
 const updateProfile = async (req: Request, res: Response) => {
   try {
-    const { token } = req.cookies;
     const data = req.body;
 
-    if (!token) {
+    const {authorization}= req.headers
+
+    if (!authorization || !authorization.startsWith("Bearer ")) {
       return res.status(401).json({ msg: "No token provided" });
     }
+    const token = authorization.split(" ")[1]
 
     jwt.verify(token, jwtSecret, async (err: Error | null, user: any) => {
       if (err || !user) {
@@ -91,12 +89,13 @@ const updateProfile = async (req: Request, res: Response) => {
 
 const getProfile = async (req: Request, res: Response) => {
   try {
-    const { token } = req.cookies;
+  
+    const {authorization}= req.headers
 
-    if (!token) {
+    if (!authorization || !authorization.startsWith("Bearer ")) {
       return res.status(401).json({ msg: "No token provided" });
     }
-
+    const token = authorization.split(" ")[1]
     jwt.verify(token, jwtSecret, async (err: Error | null, user: any) => {
       if (err || !user) {
         return res.status(401).json({ msg: "Invalid token", error: err?.message });
@@ -122,8 +121,7 @@ const getProfile = async (req: Request, res: Response) => {
 };
 
 const logOut = (req: Request, res: Response) => {
-  return res.cookie("token", " ", { httpOnly: true, secure: true, sameSite: "strict" })
-    .status(200)
+  return res.status(200)
     .send();
 };
 

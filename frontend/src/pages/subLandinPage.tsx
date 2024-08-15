@@ -1,8 +1,10 @@
 import { useState } from "react";
+
 export default function SubPage() {
   const [food, setFood] = useState("");
+
   return (
-    <>
+    <div>
       <div className=" z-0">
         <img
           className=" w-full object-cover max-h-[600px] "
@@ -47,6 +49,6 @@ export default function SubPage() {
           <img src="/appDownload.png"></img>
         </div>
       </div>
-    </>
+    </div>
   );
 }

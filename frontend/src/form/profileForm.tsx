@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation ,useQueryClient} from "@tanstack/react-query";
 import { UserContext, UserContextType } from "../userContext/userContextProvide";
 import { getProfile, updateProfile } from "../api/apiList";
 
@@ -12,9 +12,9 @@ interface UserD {
 }
 
 export default function ProfileForm() {
-  const { user, setUser } = useContext<UserContextType>(UserContext);
+  const { user,setUser } = useContext<UserContextType>(UserContext);
   
-
+  const queryClient=useQueryClient()
   const { isLoading, isSuccess, data } = useQuery({
     queryKey: ["getprofile"],
     enabled:!!user,
@@ -31,7 +31,11 @@ export default function ProfileForm() {
   const { mutateAsync } = useMutation({
     mutationFn: updateProfile,
     mutationKey: ["profileUpdate"],
-    
+    onSuccess:()=> {
+      queryClient.invalidateQueries({
+        queryKey:["getprofile"]
+      })
+    }
   });
 
   const [userData, setUserData] = useState<UserD>({
@@ -68,7 +72,6 @@ export default function ProfileForm() {
   return (
     <div className="bg-gray-200 px-4">
       <div className="shadow bg-gray-100 px-4">
-        <button onClick={()=> navigate('/')} className=" bg-red-800 text-white text-xl font-bold px-4 rounded-lg" >Go to homepage ..</button>
         <span className="block text-xl font-bold">User Profile Form</span>
         <span>View and change your profile information</span>
       </div>

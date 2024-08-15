@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/landingPage";
+
 import Profile from "./pages/profile";
 import Login from "./pages/login";
 import SubPage from "./pages/subLandinPage";
@@ -21,19 +21,20 @@ function App() {
       <AppQuery>
         <BrowserRouter>
           <Routes>
+            
+            <Route element={<Layout />}>
             <Route
               path="/"
               element={
-                <LandingPage>
-                  <SubPage />
-                </LandingPage>
+                <SubPage />
+                
               }
             />
-            <Route element={<Layout />}>
               <Route element={<ProtectedRoute />}>
                 <Route path="profile" element={<Profile />} />
+                <Route path="my-restaurant" element={<ManageRestaurantPage />} />
               </Route>
-              <Route path="my-restaurant" element={<ManageRestaurantPage />} />
+             
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
             </Route>

@@ -44,6 +44,9 @@ export default function Login() {
   onSuccess:(data)=> {
     setLogin(true)
     setUser(data)
+  },
+  onError:()=> {
+    setLogin(false)
   }
 
 })

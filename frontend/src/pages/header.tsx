@@ -71,7 +71,14 @@ export default function Header() {
                   </span>
                 </div>
                 {toggle && (
-                  <div className="flex flex-col items-center justify-center border-4 border-orange-700 absolute mt-40 rounded-md bg-white p-1">
+                  <div className="z-1 absolute top-20 flex flex-col items-center justify-center border-4 border-orange-700  rounded-md bg-white p-1">
+                     <Link
+                    to="/my-restaurant"
+                    onClick={() => setToggle(!toggle)}
+                     className=" px-4 py-2 text-lg font-bold text-orange-700 rounded-xl text-nowrap hover:bg-orange-500 hover:text-white"
+                  >
+                    My restaurant
+                  </Link>
                     <Link
                       to="/profile"
                       onClick={() => setToggle(!toggle)}

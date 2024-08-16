@@ -1,7 +1,7 @@
 
 import React from "react";
-import { useContext, FormEvent, useEffect, useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useContext, FormEvent,useState } from "react";
+import { Navigate,Link } from "react-router-dom";
 import {
   UserContext,
   UserContextType,
@@ -27,26 +27,12 @@ export default function Login() {
       return { ...prev, [name]: value };
     });
   };
-  const { login, setLogin ,setUser} = useContext<UserContextType>(UserContext);
- 
- 
-
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (login) {
-      navigate("/");
-    }
-  }, [login, navigate]);
-
-    const {mutate,isPending,error,isError}= useMutation({
+  const { setUser} = useContext<UserContextType>(UserContext);
+  const {mutate,isPending,error,isError,isSuccess}= useMutation({
   mutationFn:loginUser,
   mutationKey:["login"],
   onSuccess:(data)=> {
-    setLogin(true)
     setUser(data)
-  },
-  onError:()=> {
-    setLogin(false)
   }
 
 })
@@ -57,7 +43,9 @@ export default function Login() {
  
   };
 
-
+if(isSuccess){
+  return <Navigate to='/' />
+}
   return (
     <>
      

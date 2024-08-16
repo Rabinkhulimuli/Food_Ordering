@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { restaurantType } from '../type'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation ,useQuery} from '@tanstack/react-query'
+
 export const useCreateMyRestaurant= () => {
     const createMyRestro=async(restroFormData: FormData):Promise<restaurantType> => {
     try {
@@ -22,4 +23,25 @@ export const useCreateMyRestaurant= () => {
         console.log("error creating Restaurant ")
     }
     return {createRestro,isLoading}
+}
+export const useGetMyRestaurant= ()=> {
+    const getMyRestaurant=async():Promise<restaurantType> => {
+    try{
+        const token= localStorage.getItem("token")
+        const {data}= await axios.get("/api/my/restaurant",{
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        })
+        return data
+    }catch(err){
+        console.log("error geting restaurant info")
+        throw new Error("error retriving restaurant information")
+    }
+}
+    const {data:restaurant,isLoading}= useQuery({
+        queryFn:getMyRestaurant,
+        queryKey:["getRestaurant"]
+    })
+    return {restaurant,isLoading}
 }

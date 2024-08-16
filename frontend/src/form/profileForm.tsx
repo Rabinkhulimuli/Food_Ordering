@@ -80,7 +80,7 @@ export default function ProfileForm() {
         type="text"
         value={data?.email || ""}
         disabled
-        className="mx-4 shadow-xl w-full bg-red-200 px-8 font-bold shadow-lg"
+        className="mx-4 shadow w-full bg-red-200 px-8 font-bold"
       />
       {isLoading && <div className=" w-full text-center bg-red-200 m-4 shadow-md" >Loading ...</div>}
       

@@ -9,10 +9,11 @@ export type restaurantType ={
     restaurantName:string;
     city:string;
     country:string;
-    deliveryPrice:string;
+    deliveryPrice:number;
     estimatedDeliveryTime:number;
     cuisines:string[];
     menuItems:menuItemsType[];
     imageUrl:string;
     lastUpdated:string;
+    imageFile?:File
 }

@@ -5,7 +5,8 @@ import DetailRerstro from "./detailForm";
 import Cuisines from "./cuisines";
 import MenuSection from "./menuSection";
 import ImageSection from "./imageSection";
-
+import { useEffect } from "react";
+import { restaurantType } from "../../type";
 const formSchema = z.object({
   restaurantName: z.string({
     required_error: "restaurant name is required",
@@ -39,15 +40,38 @@ export type restaurantFormData = z.infer<typeof formSchema>;
 type Props = {
   onSave: (restaurantFormData: FormData) => void;
   isLoading: boolean;
+  restaurant?:restaurantType
 };
-export default function RestaurantForm({ onSave, isLoading }: Props) {
+export default function RestaurantForm({ onSave, isLoading,restaurant }: Props) {
   const method = useForm<restaurantFormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      cuisines: [],
-      menuItems: [{ name: "", price: 0 }],
-    },
+      defaultValues: {
+        restaurantName: restaurant?.restaurantName || '',
+        city: restaurant?.city || '',
+        country: restaurant?.country || '',
+        deliveryPrice: restaurant ? parseInt((restaurant.deliveryPrice / 100).toFixed(2)) : 0,
+        estimatedDeliveryTime: restaurant?.estimatedDeliveryTime || 0,
+        cuisines: restaurant?.cuisines || [],
+        menuItems: restaurant?.menuItems.map((item) => ({
+          name: item.name || '',
+          price: parseInt((item.price / 100).toFixed(2)) || 0,
+        })) || [{ name: '', price: 0 }],
+        imageFile: restaurant?.imageFile || new File([], ''),
+      },
   });
+useEffect(()=> {
+  if(!restaurant){
+    return
+  }
+  const deliveryPriceFormatted= parseInt(
+    (restaurant.deliveryPrice /100).toFixed(2)
+  )
+  const menuItemFormatted= restaurant.menuItems.map((item)=> ({...item,price: parseInt((item.price / 100).toFixed(2))}) )
+  const updatedRestaurant= {
+    ...restaurant,deliverryPrice:deliveryPriceFormatted,menuItems: menuItemFormatted
+  }
+  method.reset(updatedRestaurant)
+},[method,restaurant])
   const onSubmit = (formDataJson: restaurantFormData) => {
     const formData = new FormData()
     formData.append("restaurantName",formDataJson.restaurantName)
@@ -67,6 +91,7 @@ export default function RestaurantForm({ onSave, isLoading }: Props) {
     onSave(formData)
     
   };
+  
   return (
     <>
       

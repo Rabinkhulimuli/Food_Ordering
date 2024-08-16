@@ -10,10 +10,11 @@ const jwtSecret = process.env.JWT_SECRET as string;
 
 const createResturant = async (req: Request, res: Response) => {
   try {
-    const { token } = await req.cookies;
-    if (!token) {
+    const {authorization}= req.headers
+    if (!authorization || !authorization.startsWith("Bearer")){
       return res.status(404).send("there is no token");
     }
+    const token=authorization?.split(" ")[1]
     jwt.verify(token, jwtSecret, async (err: Error | null, user: any) => {
       if (err || !user) {
         return res
@@ -42,4 +43,24 @@ const createResturant = async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Error creating Restaurant" });
   }
 };
-export { createResturant };
+const getRestaurant =(req:Request,res:Response)=> {
+  try{
+    const {authorization}= req.headers
+    if(!authorization || !authorization.startsWith("Bearer")){
+      res.status(404).json("token wasnt found")
+    }
+    const token= authorization?.split(" ")[1] as string
+   
+    jwt.verify(token,jwtSecret,async(err:Error | null,user:any)=> {
+      if(err){
+        res.status(404).json("error occoured")
+      }
+      const restaurant= await Restaurant.findOne({user:user.id})
+      
+      res.status(200).json(restaurant)
+    })
+  }catch(err){
+    res.status(404).json({msg:err})
+  }
+}
+export { createResturant,getRestaurant };

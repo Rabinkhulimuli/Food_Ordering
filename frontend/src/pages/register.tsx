@@ -1,10 +1,6 @@
 import React from "react";
-import { useContext, FormEvent, useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import {
-  UserContext,
-  UserContextType,
-} from "../userContext/userContextProvide";
+import {  FormEvent,useState } from "react";
+import {Navigate,useNavigate ,Link } from "react-router-dom";
 import { postUser } from "../api/apiList";
 import { useMutation } from "@tanstack/react-query";
 export interface formData {
@@ -13,6 +9,8 @@ export interface formData {
 }
 export default function Register() {
   const [data1, setData] = useState<formData>({ email: " ", password: "" });
+  const token=localStorage.getItems("token")
+  const navigate=useNavigate()
   const { mutateAsync, isPending, isSuccess, isError, error } = useMutation({
     mutationFn: postUser,
     mutationKey: ["registerUser"],
@@ -23,15 +21,6 @@ export default function Register() {
       return { ...prev, [name]: value };
     });
   };
-  const { login } = useContext<UserContextType>(UserContext);
-
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (login) {
-      navigate("/");
-    }
-  }, [login, navigate]);
-
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -43,6 +32,9 @@ export default function Register() {
   if (isSuccess) {
     navigate("/login");
   }
+if (token){
+  return <Navigate to='/'/>
+}
   return (
     <>
       

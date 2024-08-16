@@ -12,9 +12,10 @@ import MobNavbar from "./mobNavbar";
 export default function Header() {
   const [toggle, setToggle] = useState(false);
 
-  const { login, setLogin, user, change, setChange } =
+  const { user, change, setChange } =
     useContext<UserContextType>(UserContext);
   const navigate = useNavigate();
+  const token= localStorage.getItem("token")
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
@@ -22,7 +23,6 @@ export default function Header() {
     mutationKey: ["logOut"],
     onSuccess: () => {
       queryClient.clear();
-      setLogin(false);
       setToggle(false);
     },
   });
@@ -45,7 +45,7 @@ export default function Header() {
           >
             EatMuch.com
           </div>
-          {!login && (
+          {!token && (
             <div className="hidden md:block ">
               <Link
                 to="/login"
@@ -55,7 +55,7 @@ export default function Header() {
               </Link>
             </div>
           )}
-          {login && (
+          {token && (
             <div className="hidden md:block ">
               <div className="flex flex-col items-center justify-center">
                 <div

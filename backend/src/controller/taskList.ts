@@ -19,13 +19,13 @@ const createUser = async (req: Request, res: Response) => {
 
     const existingUser = await NUser.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ msg: "User with this email already exists" });
+      return res.status(409).json({msg:"User with this email already exists" });
     }
 
     const hashedPassword = bcrypt.hashSync(password, bcryptSalt);
     const newUser = await NUser.create({ email, password: hashedPassword });
 
-    res.status(201).json(newUser);
+    res.status(201).json(newUser.email);
   } catch (err) {
     console.error("Error creating user:", err);
     res.status(500).json({ msg: "Error creating user" });

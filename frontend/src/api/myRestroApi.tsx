@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { restaurantType } from '../type'
 import { useMutation ,useQuery} from '@tanstack/react-query'
-
+import {toast} from 'sonner'
 export const useCreateMyRestaurant= () => {
     const createMyRestro=async(restroFormData: FormData):Promise<restaurantType> => {
     try {
@@ -44,4 +44,30 @@ export const useGetMyRestaurant= ()=> {
         queryKey:["getRestaurant"]
     })
     return {restaurant,isLoading}
+}
+export const useUpdateMyRestaurant=()=> {
+    try{
+        const token= localStorage.getItem("token")
+        const updateRestaurant= async(restroFormData:FormData):Promise<restaurantType>=> {
+            const{data}= await axios.put("/api/my/restaurant",restroFormData,{
+                headers:{
+                    Authorization:`Bearer ${token}`
+                }
+            })
+            return data
+        }
+        const{mutate:updateRestro,isPending,isSuccess,isError}=useMutation({
+            mutationFn:updateRestaurant,
+            mutationKey:["Update Restaurant"], 
+        })
+        if(isSuccess){
+         toast.success("Successfully updated")
+             }
+        if(isError){
+           toast.error("Unable to update restaurant")
+         }
+         return {updateRestro,isPending}
+    }catch(err){
+        throw new Error("error updating user")
+    }
 }

@@ -27,12 +27,16 @@ export default function Login() {
       return { ...prev, [name]: value };
     });
   };
-  const { setUser} = useContext<UserContextType>(UserContext);
+  const {setLogin, setUser} = useContext<UserContextType>(UserContext);
   const {mutate,isPending,error,isError,isSuccess}= useMutation({
   mutationFn:loginUser,
   mutationKey:["login"],
   onSuccess:(data)=> {
+    setLogin(true)
     setUser(data)
+  },
+  onError:()=> {
+    setLogin(false)
   }
 
 })

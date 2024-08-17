@@ -28,7 +28,6 @@ export const postUser = async (data1: formData): Promise<postResponse> => {
     const { data } = await axios.post("/user/my-user", data1);
     return data;
   } catch (error) {
-    console.log(error);
     throw new Error(
       error instanceof Error ? error.message : "An unexpected error occurred"
     );
@@ -53,9 +52,8 @@ export const loginUser = async (data1: formData): Promise<loginResponse> => {
 };
 
 export const getProfile = async (): Promise<profileResponse> => {
-  const token = localStorage.getItem("token");
-
   try {
+    const token = localStorage.getItem("token");
     const { data } = await axios.get("/user/profile", {
       headers: {
         Authorization: token ? `Bearer ${token}` : " ",
@@ -70,6 +68,9 @@ export const updateProfile = async (
   data: profileUpdateResponse
 ): Promise<profileUpdateResponse> => {
   const token = localStorage.getItem("token");
+  if(!token){
+    throw new Error("you must login first")
+  }
   try {
     await axios.post("/user/profile", data, {
       headers: {
@@ -84,7 +85,7 @@ export const updateProfile = async (
 export const logOut = async () => {
   try {
     await axios.post("/user/logout");
-    localStorage.setItem("token", " ");
+    localStorage.removeItem("token");
   } catch (err) {
     console.log("error logging out");
   }

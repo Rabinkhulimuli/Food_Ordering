@@ -1,15 +1,20 @@
-import React from "react";
+import React,{useContext} from "react";
 import {  FormEvent,useState } from "react";
 import {Navigate,useNavigate ,Link } from "react-router-dom";
 import { postUser } from "../api/apiList";
 import { useMutation } from "@tanstack/react-query";
+import {
+  UserContext,
+  UserContextType,
+} from "../userContext/userContextProvide";
+
 export interface formData {
   email: string;
   password: string;
 }
 export default function Register() {
   const [data1, setData] = useState<formData>({ email: " ", password: "" });
-  const token=localStorage.getItems("token")
+  const{login}=useContext<UserContextType>(UserContext)
   const navigate=useNavigate()
   const { mutateAsync, isPending, isSuccess, isError, error } = useMutation({
     mutationFn: postUser,
@@ -32,7 +37,7 @@ export default function Register() {
   if (isSuccess) {
     navigate("/login");
   }
-if (token){
+if (login){
   return <Navigate to='/'/>
 }
   return (

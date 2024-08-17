@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { useState, useContext } from "react";
+import { useState, useContext} from "react";
 import { logOut } from "../api/apiList";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -12,29 +12,29 @@ import MobNavbar from "./mobNavbar";
 export default function Header() {
   const [toggle, setToggle] = useState(false);
 
-  const { user, change, setChange } =
+  const {login,setLogin, user, change, setChange } =
     useContext<UserContextType>(UserContext);
   const navigate = useNavigate();
-  const token= localStorage.getItem("token")
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: logOut,
     mutationKey: ["logOut"],
     onSuccess: () => {
+      setLogin(false)
       queryClient.clear();
-      setToggle(false);
     },
   });
-
+  
   const handleLogout = () => {
     try {
+      setToggle(false)
+      setChange(false)
       mutate();
     } catch (err) {
       console.log("error loggin out");
     }
   };
-
   return (
     <>
       <div className=" ">
@@ -45,7 +45,7 @@ export default function Header() {
           >
             EatMuch.com
           </div>
-          {!token && (
+          {!login && (
             <div className="hidden md:block ">
               <Link
                 to="/login"
@@ -55,7 +55,7 @@ export default function Header() {
               </Link>
             </div>
           )}
-          {token && (
+          {login && (
             <div className="hidden md:block ">
               <div className="flex flex-col items-center justify-center">
                 <div

@@ -1,4 +1,5 @@
-
+import { UserContext } from "../userContext/userContextProvide";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 interface changeType {
   change: boolean;
@@ -10,8 +11,8 @@ export default function MobNavbar({
   setChange,
   handleLogout,
 }: changeType) {
+const {login}= useContext(UserContext)
 
-  const token= localStorage.getItem("token")
   return (
     <>
       <div
@@ -33,7 +34,7 @@ export default function MobNavbar({
                 close
               </button>
 
-              {token && (
+              {login && (
                 <div className="w-full">
                   <Link
                     to="/my-restaurant"
@@ -57,7 +58,7 @@ export default function MobNavbar({
                   </button>
                 </div>
               )}
-              {!token && (
+              {!login && (
                 <Link
                   to="/login"
                   onClick={() => setChange(() => false)}

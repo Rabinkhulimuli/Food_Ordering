@@ -26,6 +26,7 @@ export default function MenuSection(){
                 </div>
             )}
             />
+            
             <div onClick={()=> append({
                 name: "",
                 price:""

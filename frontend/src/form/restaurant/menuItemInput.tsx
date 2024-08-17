@@ -10,7 +10,7 @@ export default function MenuItemInput({index,removeMenuItem}:Props){
     return(
 
         <>
-            <div className=" flex gap-2  my-2 items-end"  >
+            <div className=" flex flex-col md:flex-row md:items-end gap-2  my-2"  >
             <div >
                 <Controller
                 name={`menuItems.${index}.name`}

@@ -31,6 +31,7 @@ export default function Header() {
       setToggle(false)
       setChange(false)
       mutate();
+      navigate('/')
     } catch (err) {
       console.log("error loggin out");
     }

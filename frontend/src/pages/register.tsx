@@ -64,6 +64,7 @@ if (login){
             </div>
             <div>
               <label>Password</label>
+              {(data1.password.length < 8 && data1.password.length !=0) && <p className=" text-red-500" >password must be atleast 8 letter!!</p>}
               <input
                 type="password"
                 name="password"
@@ -78,9 +79,9 @@ if (login){
             </div>
             <button
               className=" bg-teal-500 my-4 w-full text-2xl font-bold rounded-lg text-white py-1 hover:bg-teal-800 "
-              disabled={isPending ? true : false}
+              disabled={(isPending || data1.password.length <8)? true : false}
             >
-              {isPending ?  <span>Sign.. <img  className="w-6 animate-spin   inline mx-2" src="/loading.png"/> </span> : "Sign Up"}
+              {(isPending) ?  <span>Sign.. <img  className="w-6 animate-spin   inline mx-2" src="/loading.png"/> </span> : "Sign Up"}
             </button>
             <span className=" flex font-bold  items-center justify-center ">
               Already have an account ?{" "}

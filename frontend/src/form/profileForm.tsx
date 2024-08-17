@@ -21,12 +21,6 @@ export default function ProfileForm() {
     queryFn: getProfile,
   });
 
-  useEffect(() => {
-    if (isSuccess && data) {
-      setUser(data);
-    }
-  }, [ isSuccess,data,setUser]);
-
   const navigate = useNavigate();
   const { mutateAsync } = useMutation({
     mutationFn: updateProfile,
@@ -39,19 +33,24 @@ export default function ProfileForm() {
   });
 
   const [userData, setUserData] = useState<UserD>({
-    name: "",
-    contact: 0,
-    address: "",
-    city: "",
+    name: " ",
+    contact: undefined,
+    address: " ",
+    city: " ",
   });
   useEffect(()=> {
+   
     if(isSuccess && data){
-      console.log("setting user data")
-      setUserData((prev)=>{
-        return {...prev,name:data?.name,contact:data?.contact,address:data?.address,city:data?.city}
-      } )
+      setUser(data)
+      setUserData(
+        {name:data?.name || '',
+        contact:data?.contact || undefined,
+        address:data?.address || '',
+        city:data?.city || ''
+      }
+      )
     }
-  },[data,isSuccess])
+  },[data,isSuccess,setUser])
   const setChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = ev.target;
     console.log("form data changing")
@@ -66,9 +65,6 @@ export default function ProfileForm() {
     await mutateAsync(userData);
     navigate("/");
   };
-
-  
-
   return (
     <div className="bg-gray-200 px-4">
       <div className="shadow bg-gray-100 px-4">
@@ -76,12 +72,7 @@ export default function ProfileForm() {
         <span>View and change your profile information</span>
       </div>
       <label>Email</label>
-      <input
-        type="text"
-        value={data?.email || ""}
-        disabled
-        className="mx-4 z-0 w-full bg-red-200 px-8 font-bold"
-      />
+      <p  className="mx-4 z-0 w-full bg-red-200 px-8 font-bold" >{data?.email ||'Couldnt retrive your email'} </p>
       {isLoading && <div className=" w-full text-center bg-red-200 m-4 shadow-md" >Loading ...</div>}
       
       <form onSubmit={updateForm}>

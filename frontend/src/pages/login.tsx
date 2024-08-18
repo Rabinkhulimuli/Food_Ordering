@@ -2,6 +2,7 @@
 import React from "react";
 import { useContext, FormEvent,useState } from "react";
 import { Navigate,Link } from "react-router-dom";
+import {Toaster,toast} from 'sonner'
 import {
   UserContext,
   UserContextType,
@@ -36,6 +37,7 @@ export default function Login() {
     setUser(data)
   },
   onError:()=> {
+    toast.message("error Logging in")
     setLogin(false)
   }
 
@@ -48,6 +50,7 @@ export default function Login() {
   };
 
 if(isSuccess){
+  toast.message("Logged in Successfully")
   return <Navigate to='/' />
 }
   return (
@@ -95,6 +98,7 @@ if(isSuccess){
       
         </div>
       </div>
+      <Toaster richColors />
     </>
   );
 }

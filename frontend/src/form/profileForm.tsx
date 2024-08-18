@@ -34,7 +34,7 @@ export default function ProfileForm() {
 
   const [userData, setUserData] = useState<UserD>({
     name: " ",
-    contact: undefined,
+    contact: 977,
     address: " ",
     city: " ",
   });

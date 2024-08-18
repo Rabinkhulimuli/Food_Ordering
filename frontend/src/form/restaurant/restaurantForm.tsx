@@ -7,6 +7,7 @@ import MenuSection from "./menuSection";
 import ImageSection from "./imageSection";
 import { useEffect } from "react";
 import { restaurantType } from "../../type";
+import { Toaster } from "sonner";
 const formSchema = z.object({
   restaurantName: z.string({
     required_error: "restaurant name is required",
@@ -53,7 +54,7 @@ export default function RestaurantForm({ onSave, isLoading,restaurant }: Props) 
         restaurantName: restaurant?.restaurantName || '',
         city: restaurant?.city || '',
         country: restaurant?.country || '',
-        deliveryPrice: restaurant ? parseInt((restaurant.deliveryPrice / 100).toFixed(2)) : 0,
+        deliveryPrice: restaurant ? (parseInt((restaurant.deliveryPrice / 100).toFixed(2)) ): 0,
         estimatedDeliveryTime: restaurant?.estimatedDeliveryTime || 0,
         cuisines: restaurant?.cuisines || [],
         menuItems: restaurant?.menuItems.map((item) => ({
@@ -68,11 +69,11 @@ useEffect(()=> {
     return
   }
   const deliveryPriceFormatted= parseInt(
-    (restaurant.deliveryPrice /100).toFixed(2)
+    (restaurant.deliveryPrice / 100).toFixed(2)
   )
   const menuItemFormatted= restaurant.menuItems.map((item)=> ({...item,price: parseInt((item.price / 100).toFixed(2))}) )
   const updatedRestaurant= {
-    ...restaurant,deliverryPrice:deliveryPriceFormatted,menuItems: menuItemFormatted
+    ...restaurant,deliveryPrice:deliveryPriceFormatted,menuItems: menuItemFormatted
   }
   method.reset(updatedRestaurant)
 },[method,restaurant])
@@ -81,6 +82,7 @@ useEffect(()=> {
     formData.append("restaurantName",formDataJson.restaurantName)
     formData.append("city",formDataJson.city)
     formData.append("country",formDataJson.country)
+   
     formData.append("deliveryPrice",(formDataJson.deliveryPrice * 100).toString())
     formData.append("estimatedDeliveryTime",formDataJson.estimatedDeliveryTime.toString())
     formDataJson.cuisines.forEach((cuisine,index)=> {
@@ -89,6 +91,7 @@ useEffect(()=> {
     })
     formDataJson.menuItems.forEach((item,index)=> {
       formData.append(`menuItems[${index}][name]`,item.name.toString())
+
       formData.append(`menuItems[${index}][price]`,(item.price * 100).toString())
     })
     if(formDataJson.imageFile){
@@ -99,7 +102,7 @@ useEffect(()=> {
   
   return (
     <>
-      
+      <Toaster richColors />
       <FormProvider {...method}>
         <form onSubmit={method.handleSubmit(onSubmit)} className=" bg-gray-100 px-4 space-y-2" >
           <DetailRerstro />
@@ -112,10 +115,12 @@ useEffect(()=> {
           <button type="submit" disabled={isLoading ? true : false}
             className=" bg-black px-4 py-2 text-xl font-bold text-white rounded-lg "
           >
-            {" "}
+            
             {isLoading ? "Loading ..." : "Submit"}{" "}
           </button>
         </form>
+        
+        
       </FormProvider>
     </>
   );

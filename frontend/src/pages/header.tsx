@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-
+import { Toaster,toast } from "sonner";
 import { useState, useContext} from "react";
 import { logOut } from "../api/apiList";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -21,6 +21,7 @@ export default function Header() {
     mutationFn: logOut,
     mutationKey: ["logOut"],
     onSuccess: () => {
+      toast.message("LogOut Successfully")
       setLogin(false)
       queryClient.clear();
     },
@@ -113,6 +114,7 @@ export default function Header() {
           handleLogout={handleLogout}
         />
       </div>
+      <Toaster richColors />
     </>
   );
 }

@@ -1,7 +1,7 @@
-import { useState } from "react";
 
+import SearchBox from "../components/searchBar";
 export default function SubPage() {
-  const [food, setFood] = useState("");
+ 
 
   return (
     <div>
@@ -17,22 +17,7 @@ export default function SubPage() {
             Tuck into a takeaway today
           </h2>
           <p className="text-xl">Food is just a click away!</p>
-          <div className=" ">
-            <img
-              className=" max-w-8 absolute z-10 m-4 hidden md:block "
-              src="/search.svg"
-            ></img>
-            <input
-              value={food}
-              onChange={(event) => setFood(event?.target.value)}
-              className=" md:relative shadow-md w-full border  text-center rounded-xl p-4 "
-              type="text"
-              placeholder="Search By City Or Town"
-            />
-            <button className="md:w-24  md:absolute md:right-14 md:m-2  shadow w-full text-center rounded-xl p-2 my-1 bg-orange-500 font-bold text-lg text-white hover:bg-orange-600">
-              Search
-            </button>
-          </div>
+          <SearchBox/>
         </div>
       </div>
 

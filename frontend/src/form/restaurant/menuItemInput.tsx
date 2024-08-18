@@ -19,7 +19,7 @@ export default function MenuItemInput({index,removeMenuItem}:Props){
                     <div className="flex flex-col gap-2 ">
                         <label>Name</label>
                         {menuItemsError?.name &&<p>{`${menuItemsError?.name?.message}`}</p>}
-                        <input {...field} placeholder="pizza" className=" border block border-black rounded  h-10 px-1" />
+                        <input {...field} placeholder="pizza"  className=" border block border-black rounded  h-10 px-1" />
                     </div>
                 )}
              />

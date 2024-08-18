@@ -17,10 +17,10 @@ export const useCreateMyRestaurant= () => {
         mutationKey:["createRerstaurant"]
     })
     if(isSuccess){
-        console.log("restaurant created successfully")
+        toast.message("successfully created")
     }
     if(isError){
-        console.log("error creating Restaurant ")
+        toast.message("Error creating Restaurant ")
     }
     return {createRestro,isLoading}
 }

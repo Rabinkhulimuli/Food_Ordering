@@ -1,3 +1,12 @@
+export type UserD = {
+    id:string;
+    email?:string;
+    name?: string;
+    contact?: number;
+    addressLine1?: string;
+    city?: string;
+    country?:string
+  }
 export type menuItemsType={
     _id:string;
     name:string;
@@ -16,4 +25,12 @@ export type restaurantType ={
     imageUrl:string;
     lastUpdated:string;
     imageFile?:File
+}
+export type restaurantSearchResponse={
+    data:restaurantType[];
+    pagination:{
+        total:number;
+        page:number;
+        pages:number;
+    }
 }

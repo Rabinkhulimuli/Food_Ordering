@@ -107,10 +107,12 @@ const getProfile = async (req: Request, res: Response) => {
       }
 
       return res.status(200).json({
+        id:Duser._id,
         name: Duser?.name,
         email: Duser.email,
         city: Duser?.city,
-        address: Duser?.address,
+        country:Duser?.country,
+        addressLine1: Duser?.addressLine1,
         contact: Duser?.contact,
       });
     });

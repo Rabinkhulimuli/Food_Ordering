@@ -1,29 +1,20 @@
 import { formData } from "../pages/login";
 import axios from "axios";
-
+import { useQuery,useMutation,useQueryClient } from "@tanstack/react-query";
+import { profileFormType } from "../form/profileForm";
+import { UserD } from "../type";
+import { toast } from "sonner";
 export interface loginResponse {
   id: string;
   email: string;
 }
-export interface profileResponse {
-  email: string;
-  id: string;
-  name?: string;
-  contact?: number;
-  address?: string;
-  city?: string;
-}
-export interface profileUpdateResponse {
-  name?: string;
-  contact?: number;
-  address?: string;
-  city?: string;
-}
+
+
 export interface postResponse {
   email: string;
   password: string;
 }
-export const postUser = async (data1: formData): Promise<postResponse> => {
+export const postUser = async (data1: postResponse): Promise<postResponse> => {
   try {
     const { data } = await axios.post("/user/my-user", data1);
     return data;
@@ -51,7 +42,8 @@ export const loginUser = async (data1: formData): Promise<loginResponse> => {
   }
 };
 
-export const getProfile = async (): Promise<profileResponse> => {
+export const useGetMyProfile=()=> {
+  const getProfile = async (): Promise<UserD> => {
   try {
     const token = localStorage.getItem("token");
     const { data } = await axios.get("/user/profile", {
@@ -63,25 +55,43 @@ export const getProfile = async (): Promise<profileResponse> => {
   } catch (err) {
     throw new Error("Error getting profile");
   }
+  
 };
-export const updateProfile = async (
-  data: profileUpdateResponse
-): Promise<profileUpdateResponse> => {
-  const token = localStorage.getItem("token");
-  if(!token){
-    throw new Error("you must login first")
+const {data:response,isLoading,isSuccess}=useQuery({
+  queryFn:getProfile,
+  queryKey:["getprofile"]
+})
+return {response,isLoading,isSuccess}
+}
+
+export const useUpdateProfile=()=> {
+  try{
+    const queryClient=useQueryClient()
+    const token = localStorage.getItem("token")
+    const updateProfile=async(data:profileFormType):Promise<profileFormType> => {
+      const res= await axios.put("/user/profile",data,{
+        headers: {
+          Authorization: token ? `Bearer ${token}` : " ",
+        },
+      }) 
+      return res.data
+    }
+    const {mutate:response,isPending}= useMutation({
+      mutationFn:updateProfile,
+      mutationKey:["updateProfile"],
+      onSuccess:()=> {
+        toast.message("Successfully Updated")
+        queryClient.invalidateQueries({
+          queryKey:["getprofile"]
+        })}
+    })
+    return{response,isPending}
   }
-  try {
-    await axios.post("/user/profile", data, {
-      headers: {
-        Authorization: token ? `Bearer ${token}` : " ",
-      },
-    });
-    return data;
-  } catch (err) {
-    throw new Error("Error updating profile ");
+  catch(err){
+    throw new Error("error creating profile")
   }
-};
+  
+}
 export const logOut = async () => {
   try {
     await axios.post("/user/logout");

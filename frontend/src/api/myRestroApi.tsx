@@ -5,7 +5,12 @@ import {toast} from 'sonner'
 export const useCreateMyRestaurant= () => {
     const createMyRestro=async(restroFormData: FormData):Promise<restaurantType> => {
     try {
-        const response =await axios.post("/api/my/restaurant",restroFormData)
+        const token = localStorage.getItem("token")
+        const response =await axios.post("/api/my/restaurant",restroFormData,{
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        })
         return response.data
     }catch(err){
         console.log("error creating restaurant")

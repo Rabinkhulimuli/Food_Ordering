@@ -1,7 +1,12 @@
-
-import SearchBox from "../components/searchBar";
+import { useNavigate } from "react-router-dom";
+import SearchBox,{SearchForm} from "../components/searchBar";
 export default function SubPage() {
- 
+  const navigate=useNavigate()
+  const handleSearchSubmit=(searchFormValues:SearchForm)=> {
+    navigate({
+      pathname:`/search/${searchFormValues.searchQuery}`,
+    })
+  }
 
   return (
     <div>
@@ -17,7 +22,7 @@ export default function SubPage() {
             Tuck into a takeaway today
           </h2>
           <p className="text-xl">Food is just a click away!</p>
-          <SearchBox/>
+          <SearchBox placeHolder="Search by City or Town" onSubmit={handleSearchSubmit}/>
         </div>
       </div>
 

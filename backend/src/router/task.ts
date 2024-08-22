@@ -9,6 +9,6 @@ const {updateProfile,
 } =require('../controller/taskList')
 router.route('/my-user').post(createUser)
 router.route('/user-loggin').post(loggin)
-router.route('/profile').post(validateMyUserRequest,updateProfile).get(getProfile)
+router.route('/profile').get(getProfile).put(validateMyUserRequest,updateProfile)
 router.route('/logout').post(logOut)
 export default router

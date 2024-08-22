@@ -1,129 +1,131 @@
-import React, { useContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation ,useQueryClient} from "@tanstack/react-query";
-import { UserContext, UserContextType } from "../userContext/userContextProvide";
-import { getProfile, updateProfile } from "../api/apiList";
-
-interface UserD {
-  name?: string;
-  contact?: number;
-  address?: string;
-  city?: string;
-}
-
-export default function ProfileForm() {
-  const { user,setUser } = useContext<UserContextType>(UserContext);
-  
-  const queryClient=useQueryClient()
-  const { isLoading, isSuccess, data } = useQuery({
-    queryKey: ["getprofile"],
-    enabled:!!user,
-    queryFn: getProfile,
-  });
-
-  const navigate = useNavigate();
-  const { mutateAsync } = useMutation({
-    mutationFn: updateProfile,
-    mutationKey: ["profileUpdate"],
-    onSuccess:()=> {
-      queryClient.invalidateQueries({
-        queryKey:["getprofile"]
-      })
-    }
-  });
-
-  const [userData, setUserData] = useState<UserD>({
-    name: " ",
-    contact: 977,
-    address: " ",
-    city: " ",
-  });
-  useEffect(()=> {
-   
-    if(isSuccess && data){
-      setUser(data)
-      setUserData(
-        {name:data?.name || '',
-        contact:data?.contact || undefined,
-        address:data?.address || '',
-        city:data?.city || ''
-      }
-      )
-    }
-  },[data,isSuccess,setUser])
-  const setChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = ev.target;
-    console.log("form data changing")
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const updateForm = async (ev: React.FormEvent<HTMLFormElement>) => {
-    ev.preventDefault();
-    await mutateAsync(userData);
-    navigate("/");
-  };
-  return (
-    <div className="bg-gray-200 px-4">
-      <div className="shadow bg-gray-100 px-4">
-        <span className="block text-xl font-bold">User Profile Form</span>
-        <span>View and change your profile information</span>
-      </div>
-      <label>Email</label>
-      <p  className="mx-4 z-0 w-full bg-red-200 px-8 font-bold" >{data?.email ||'Couldnt retrive your email'} </p>
-      {isLoading && <div className=" w-full text-center bg-red-200 m-4 shadow-md" >Loading ...</div>}
-      
-      <form onSubmit={updateForm}>
-        <label className="block">Name</label>
-        <input
-          type="text"
-          value={userData.name}
-          name="name"
-          onChange={setChange}
-          placeholder="Name"
-          className="shadow-md border mx-4 px-2 w-full"
+  import { useForm,Controller} from "react-hook-form";
+  import { z } from "zod";
+  import { Toaster } from "sonner";
+  import { zodResolver } from "@hookform/resolvers/zod";
+import { UserD } from "../type";
+import { useEffect } from "react";
+  const formSchema= z.object({
+    email:z.string({
+      required_error:"Email is required"
+    }).optional(),
+    name:z.string({
+      required_error:"Name is required !"
+    }),
+    addressLine1:z.string({
+      required_error:"Address is required !"
+    }),
+    city:z.string({
+      required_error:"City is required !"
+    }),
+    country:z.string({
+      required_error:"Country is required !"
+    }),
+    contact:z.coerce.number({
+      required_error:"Phone Number is required !",
+      invalid_type_error:"Phone Number must be a number !"
+    }).min(10,"Phone Number must be of 10 digits")
+   /*  email:z.string().optional(),
+    name:z.string().min(1,"name is required"),
+    addressLine1:z.string().min(1,"Address is required"),
+    city:z.string().min(1,"City is Required"),
+    country:z.string().min(1,"Country is required"),
+    number:z.number().min(10,"Phone number is required") */
+  })
+  export type profileFormType= z.infer<typeof  formSchema>
+  type Props={
+    onSave:(profileFormData:profileFormType)=> void
+    isLoading:boolean  
+    currentUser:UserD
+    title?:string;
+    buttonText?:string
+  }
+  export default function ProfileForm({onSave,isLoading,currentUser,title="user Profile",buttonText="Submit"}:Props){
+    const {handleSubmit,control,formState:{errors},reset}= useForm<profileFormType>({
+      resolver:zodResolver(formSchema),
+      defaultValues:currentUser
+    })
+    useEffect(()=> {
+      reset(currentUser)
+    },[currentUser,reset])
+    return (
+      <>
+      <Toaster richColors/>
+      <div className=" bg-gray-200 mx-2 p-2">
+           <h2 className=" text-xl font-bold capitalize tracking-tight" >{title}</h2>
+      <span className=" text-gray-500" >view and change your profile information here</span>
+      <span className=" block font-semibold text-gray-500" >Email</span>
+      <span className=" block shadow bg-white px-2 text-gray-500" >{currentUser?.email} </span>
+      <form onSubmit={handleSubmit(onSave)} className=" " >
+      <Controller 
+      name="name"
+      control={control}
+      render={({field})=> (
+        <div>
+          <label className=" font-semibold" >Name</label>
+        <input type="text" {...field} 
+          className=" block px-2 w-1/2 shadow-md w-full"
         />
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-auto w-full">
-            <label className="block">Contact Number</label>
-            <input
-              type="tel"
-              value={userData.contact}
-              name="contact"
-              onChange={setChange}
-              placeholder="Phone"
-              className="shadow-md border mx-4 px-2 w-full"
-            />
-          </div>
-          <div className="flex-auto w-full">
-            <label className="block">Address</label>
-            <input
-              type="text"
-              value={userData.address}
-              name="address"
-              onChange={setChange}
-              placeholder="Address"
-              className="shadow-md border mx-4 px-2 w-full"
-            />
-          </div>
-          <div className="flex-auto w-full">
-            <label className="block">City</label>
-            <input
-              type="text"
-              value={userData.city}
-              name="city"
-              onChange={setChange}
-              placeholder="City"
-              className="shadow-md border mx-4 px-2 w-full"
-            />
-          </div>
+        {errors?.name && (<p className=" text-red-800 w-full text-center" >{`${errors?.name?.message}`} </p>)}
         </div>
-        <button className="bg-orange-700 px-8 py-2 rounded-xl font-bold text-white hover:bg-orange-500 my-2">
-          Submit
-        </button>
+        
+      )}
+      />
+
+      <Controller
+        name="addressLine1"
+        control={control}
+        render={({field})=> (
+          <div>
+            <label className=" font-semibold" >Address Line 1</label>
+            <input type="text" {...field}
+              className=" block px-2 w-1/2 shadow-md w-full"
+            />
+            {errors.addressLine1 && <p className=" text-red-800 w-full text-center" >{`${errors.addressLine1.message}`} </p>}
+          </div>
+        )}
+      />
+      <Controller
+        name="contact"
+        control={control}
+        render={({field})=> (
+          <div>
+            <label className=" font-semibold" >Phone Number</label>
+            <input type="text" {...field}
+              className=" block px-2 w-1/2 shadow-md w-full"
+            />
+            {errors?.contact && <p className=" text-red-800 w-full text-center" >{`${errors.contact.message}`} </p>}
+          </div>
+        )}
+      />
+      <Controller 
+        name="city"
+        control={control}
+        render={({field})=> (
+          <div>
+            <label className=" font-semibold" >City</label>
+            <input type="text" {...field}
+              className=" block px-2 w-1/2 shadow-md w-full"
+            />
+            {errors?.city && <p className=" text-red-800 w-full text-center" >{`${errors.city.message}`} </p>}
+          </div>
+        )}
+      />
+      <Controller
+        name="country"
+        control={control}
+        render={({field})=> (
+          <div>
+            <label className=" font-semibold" >Country</label>
+            <input type="text" {...field}
+              className=" block px-2 w-1/2 shadow-md w-full"
+            />
+            {errors?.country && <p className=" text-red-800 w-full text-center" >{`${errors.country.message}`}</p>}
+          </div>
+        )}
+      />
+      {isLoading? <div>Loading ...</div>:<button  className=" bg-orange-500 px-4 py-2 rounded-lg text-lg font-bold text-white my-1" >{buttonText} </button>}
       </form>
-    </div>
-  );
-}
+      </div>
+        </>
+    )
+  }

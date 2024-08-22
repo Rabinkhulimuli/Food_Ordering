@@ -14,10 +14,13 @@ const userSchema=new mongoose.Schema({
     contact:{
         type:Number,
     },
-    address:{
+    addressLine1:{
         type:String
     },
     city:{
+        type:String
+    },
+    country:{
         type:String
     }
 })

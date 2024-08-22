@@ -1,16 +1,11 @@
 import { Outlet,Navigate } from "react-router-dom";
-import { getProfile } from "../api/apiList";
-import { useQuery } from "@tanstack/react-query";
+import { useGetMyProfile } from "../api/apiList";
 import { useEffect,useContext } from "react";
 import { UserContext } from "../userContext/userContextProvide";
 
 export default function  ProtectedRoute(){
     const{setLogin}=useContext(UserContext)
-    const {isSuccess,isLoading}=useQuery({
-      queryFn:getProfile,
-      queryKey:["getProfile"],
-      
-    })
+    const {isLoading,isSuccess}=useGetMyProfile()
     useEffect(()=> {
       if(isSuccess){
         setLogin(true)

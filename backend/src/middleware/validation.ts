@@ -9,9 +9,11 @@ const handleValidationError= async(req:Request,res:Response,next:NextFunction)=>
 }
 export  const validateMyUserRequest= [
     body('name').isString().notEmpty().withMessage("Name must be a string"),
-    body('address').isString().notEmpty().withMessage("address must be a string"),
+    body('addressLine1').isString().notEmpty().withMessage("address must be a string"),
     body('city').isString().notEmpty().withMessage("city must be a valid one"),
     body('contact').isNumeric().notEmpty().withMessage("Contact must be a number"),
+    body('contact').isNumeric().notEmpty().withMessage("Phone number must be a number"),
+    body('country').isString().notEmpty().withMessage("country mut be a valid string"),
     handleValidationError,
 ]
 export const validateMyRestaurantRequest = [

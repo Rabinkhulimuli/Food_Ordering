@@ -1,7 +1,6 @@
 import {z} from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm ,FormProvider,Controller} from 'react-hook-form';
-import { Form } from 'react-router-dom';
 const formSchema = z.object({
     searchQuery:z.string({
         required_error:"Restaurant name is required",
@@ -21,31 +20,40 @@ export default function SearchBox({onSubmit,onReset,placeHolder}:Props){
             searchQuery:""
         }
     })
-   
+   const handleReset=()=> {
+    method.reset({
+        searchQuery : "",
+    })
+    if(onReset){
+        onReset()
+    }
+   }
     return (
         <>
            <FormProvider {...method}>
-            <Form onSubmit={method.handleSubmit(onSubmit)}>
-            <div className=" ">
+            <form onSubmit={method.handleSubmit(onSubmit)}>
+            <div className="flex nowrap shadow-lg px-1  rounded-lg gap-2">
             <img
-              className=" max-w-8 absolute z-10 m-4 hidden md:block "
+              className=" max-w-8 mx-4 hidden md:block "
               src="/search.svg"
             ></img>
             <Controller
                 name="searchQuery"
                 control={method.control}
                 render={({field})=> (
-                    <input {...field} placeholder={placeHolder} type="text" />
+                    <input {...field} placeholder={placeHolder} type="text" className=" w-full border-none shadow-none focus-visible:ring-0   p-2  " />
                 )}
             />
-            <button className="md:w-24  md:absolute md:right-14 md:m-2  shadow w-full text-center rounded-xl p-2 my-1 bg-orange-500 font-bold text-lg text-white hover:bg-orange-600">
+            
+          
+          {method.formState.isDirty && (
+            <button onClick={handleReset} type="button"  className="md:w-24  shadow w-full text-center rounded-xl p-2 my-1 font-bold text-lg  hover:bg-orange-600" >clear</button>
+          )}
+          <button className="md:w-24   shadow w-full text-center rounded-xl p-2 my-1 bg-orange-500 font-bold text-lg text-white hover:bg-orange-600">
               Search
             </button>
-          </div>
-          {Form.FormState.isDirty && (
-            <button type="button">clear</button>
-          )}
-            </Form>
+            </div>
+            </form>
            </FormProvider>
         </>
     )

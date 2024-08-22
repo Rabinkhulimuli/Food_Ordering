@@ -5,13 +5,13 @@ const searchRestaurant = async (req: Request, res: Response) => {
     const city = req.params.city;
     const searchQuery = (req.query.searchQuery as string) || "";
     const selectedCuisines = (req.query.selectedCuisines as string) || "";
-    const sortOption = (req.query.sortOption as string) || "";
+    const sortOption = (req.query.sortOption as string) || "city";
     const page = parseInt(req.query.page as string) || 1;
     let query: any = {};
     query["city"] = new RegExp(city, "i");
     const cityCheck = await Restaurant.countDocuments(query);
     if (cityCheck === 0) {
-      res.status(404).json({
+      return res.status(404).json({
         data:[],
         pagination:{
             total:0,
@@ -51,7 +51,8 @@ const searchRestaurant = async (req: Request, res: Response) => {
       }
       res.status(200).json(response)
   } catch (err) {
-    res.status(500).json("Error in search parameter");
+    console.log(err)
+    res.status(500).json({msg:err});
   }
 };
 export {

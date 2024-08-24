@@ -22,7 +22,7 @@ export default function SubPage() {
             Tuck into a takeaway today
           </h2>
           <p className="text-xl">Food is just a click away!</p>
-          <SearchBox placeHolder="Search by City or Town" onSubmit={handleSearchSubmit}/>
+          <SearchBox placeHolder="Search by City or Town eg. New York" onSubmit={handleSearchSubmit}/>
         </div>
       </div>
 

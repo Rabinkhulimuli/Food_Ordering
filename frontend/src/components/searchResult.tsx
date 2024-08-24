@@ -7,15 +7,14 @@ export default function SearchCard({restaurant}:Props){
    
     return(
         <>
-            <p>Search card </p>
             <Link to={`/detail/${restaurant._id}`} className=" py-4  shadow-md grid lg:grid-cols-[2fr_3fr] gap-5 group " > 
                     <div className="  aspect-[16/6]"> 
                     <img className="  rounded-md w-full h-full object-cover " src={restaurant.imageUrl} ></img>
                     </div>
                     
-                    <div className=" ">
+                    <div className=" px-4 ">
                     <span className="block text-xl font-bold capitalize mb-1 tracking-tight group-hover:underline" >{restaurant.restaurantName} </span>
-                    <div className=" grid grid-cols-[250px_1fr] h-32 " >
+                    <div className=" grid lg:grid-cols-[250px_1fr] h-32 " >
                         <div className="   " >
                             
                             {restaurant.cuisines?.map((item,index)=> 
@@ -31,7 +30,7 @@ export default function SearchCard({restaurant}:Props){
                             <img src="/clock.png" className=" inline w-6"/>
                             {restaurant.estimatedDeliveryTime} min
                             </span>
-                            <span className=" flex items-center gap-1" >
+                            <span className=" flex items-center  gap-1" >
                                 <img src="/cash.png" className="inline w-6 " />
                                 Delivery From $ 
                                  { (restaurant.deliveryPrice /100).toFixed(2)}

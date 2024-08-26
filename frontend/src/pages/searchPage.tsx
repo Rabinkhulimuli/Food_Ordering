@@ -4,14 +4,19 @@ import SearchDetail from "../components/searchDetail";
 import SearchCard from "../components/searchResult";
 import SearchBox, { SearchForm } from "../components/searchBar";
 import { useState } from "react";
+import Pagination from "../components/pagination";
+import CuisineFilter from "../components/cuisineFilter";
 export type SearchState={
     searchQuery: string;
-
+    page:number;
+    selectedCuisines:string[]
 }
 export default function SearchPage(){
     const{city}= useParams()
     const [searchState,setSearchState]= useState<SearchState>({
-        searchQuery:""
+        searchQuery:"",
+        page:1,
+        selectedCuisines:[]
     })
     const {results,isLoading}= useSearchRequest(searchState,city)
     if(isLoading){
@@ -20,7 +25,7 @@ export default function SearchPage(){
     if (!results?.data || !city){
         return <span>No search found.</span>
     }
-    const searchCard= results.data.map((eh)=> <SearchCard restaurant={eh} />)
+    
     const handleSearch= (searchFormData:SearchForm)=> {
         setSearchState((prev)=> ({
             ...prev,searchQuery:searchFormData.searchQuery,
@@ -31,13 +36,26 @@ export default function SearchPage(){
             ...prev,searchQuery:"",
         }))
     }
+    const onPageChange=(page:number)=> {
+        setSearchState((prev)=> ({
+            ...prev,page:page,
+        }))
+    }
+    const setSelectedCuisine=(selectedCuisines:string[])=> {
+        setSearchState((prev)=> ({
+            ...prev,selectedCuisines:selectedCuisines,page:1
+        }))
+    }
     return(
         <>
         
         <div className=" grid md:grid-cols-[250px_1fr]" >
-            <div>
-                "cuisines"
-            </div>
+            <CuisineFilter 
+                onChange={setSelectedCuisine}
+               
+                sellectedCuisines={searchState.selectedCuisines}
+                
+            />
             <div>
             <SearchBox onSubmit={handleSearch} 
                 placeHolder="Search by Cuisines or Restaurant"
@@ -48,11 +66,12 @@ export default function SearchPage(){
                 total={results?.pagination?.total}
                 city={city}
             />
-           {searchCard}
+          
+           <SearchCard restaurants={results.data} />
             </div>
             
         </div>
-            
+            <Pagination page={results.pagination.page} pages={results.pagination.pages} onPageChange={onPageChange} />
         </>
     )
 }

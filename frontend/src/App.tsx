@@ -37,6 +37,7 @@ function App() {
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
               <Route path="search/:city" element={<SearchPage/>} />
+              <Route path="detail/:id" element={<div>This is detail section</div>}  />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -7,7 +7,10 @@ export const useSearchRequest= (searchState:SearchState,city?:string)=> {
     const createSearchReq= async():Promise<restaurantSearchResponse>=> {
             const params= new URLSearchParams()
             params.set("searchQuery",searchState.searchQuery)
+            params.set("page",searchState.page.toString())
+            params.set("selectedCuisines",searchState.selectedCuisines.join(","))
             const response= await axios.get(`api/restaurant/search/${city}?${params.toString()}`)
+
             return response.data   
     }
     const {isLoading,data:results}= useQuery({
@@ -19,5 +22,4 @@ export const useSearchRequest= (searchState:SearchState,city?:string)=> {
 }catch(err){
     throw new Error(JSON.stringify(err))
 }
-
 }

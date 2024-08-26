@@ -40,7 +40,7 @@ export default function SearchBox({
   };
   return (
     <>
-      <FormProvider {...method}>
+      <FormProvider {...method} >
         <form onSubmit={method.handleSubmit(onSubmit)}>
           <div className="flex flex-col md:flex-row nowrap shadow mx-1 px-1 my-4 border rounded-lg gap-2 ">
             <img

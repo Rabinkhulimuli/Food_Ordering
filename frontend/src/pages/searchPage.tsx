@@ -6,18 +6,22 @@ import SearchBox, { SearchForm } from "../components/searchBar";
 import { useState } from "react";
 import Pagination from "../components/pagination";
 import CuisineFilter from "../components/cuisineFilter";
+import SearchOption from "../components/searchOption";
 export type SearchState={
     searchQuery: string;
     page:number;
-    selectedCuisines:string[]
+    selectedCuisines:string[];
+    sortOption:string
 }
 export default function SearchPage(){
     const{city}= useParams()
     const [searchState,setSearchState]= useState<SearchState>({
         searchQuery:"",
         page:1,
-        selectedCuisines:[]
+        selectedCuisines:[],
+        sortOption:''
     })
+    const [isExpanded,setIsExpanded]= useState<boolean>(false)
     const {results,isLoading}= useSearchRequest(searchState,city)
     if(isLoading){
         return <span>Loading ...</span>
@@ -46,6 +50,11 @@ export default function SearchPage(){
             ...prev,selectedCuisines:selectedCuisines,page:1
         }))
     }
+    const setChangeOption=(value:string)=> {
+        setSearchState((prev)=> ({
+            ...prev,sortOption:value
+        }))
+    }
     return(
         <>
         
@@ -54,7 +63,8 @@ export default function SearchPage(){
                 onChange={setSelectedCuisine}
                
                 sellectedCuisines={searchState.selectedCuisines}
-                
+                isExpanded={isExpanded}
+                onExpandedClick={()=>{setIsExpanded(!isExpanded)}}
             />
             <div>
             <SearchBox onSubmit={handleSearch} 
@@ -62,11 +72,17 @@ export default function SearchPage(){
                 onReset={resetForm}
                 searchQuery={searchState.searchQuery}
             />
-            <SearchDetail
+            <div className="flex flex-col lg:flex-row justify-between mx-2">
+                <SearchDetail
                 total={results?.pagination?.total}
                 city={city}
             />
-          
+            <SearchOption
+                sortOption={searchState.sortOption}
+                onChange={setChangeOption}
+            />
+            </div>
+            
            <SearchCard restaurants={results.data} />
             </div>
             

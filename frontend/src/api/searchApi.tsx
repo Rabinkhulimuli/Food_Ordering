@@ -9,6 +9,7 @@ export const useSearchRequest= (searchState:SearchState,city?:string)=> {
             params.set("searchQuery",searchState.searchQuery)
             params.set("page",searchState.page.toString())
             params.set("selectedCuisines",searchState.selectedCuisines.join(","))
+            params.set("sortOption",searchState.sortOption)
             const response= await axios.get(`api/restaurant/search/${city}?${params.toString()}`)
 
             return response.data   

@@ -23,23 +23,23 @@ export default function CuisineFilter({
   const handleCuisineReset = () => onChange([]);
   return (
     <>
-      <div className=" hidden md:block" >
+      <div className=" hidden md:block shadow mt-4 " >
         <div>
-          <h2>Filter Cuisine By </h2>
-          <button onClick={handleCuisineReset}>Reset Cuisines</button>
-          {cuisineList.map((cuisine) => {
+          <h2 className="inline font-semibold px-1">Filter By Cuisine </h2>
+          <button onClick={handleCuisineReset} className=" underline text-red-500 float-right px-1">Reset Cuisines</button>
+          {cuisineList.slice(0,isExpanded? cuisineList.length:7).map((cuisine) => {
             const isSelected = sellectedCuisines.includes(cuisine);
             return (
-              <div key={cuisine} className=" p-1 bg-gray-200 m-1 border rounded-lg shadow  ">
+            <div key={cuisine} className={`p-1 m-1 border rounded-lg shadow  ${isSelected? " border border-2 border-orange-700 font-semibold text-green-600":""}`}>
                
-                <label className=" flex gap-2 items-center ">
+                <label className=" flex gap-2 items-center px-2">
                   <input
                     id={`cuisine_${cuisine}`}
                     type="checkbox"
                     value={cuisine}
                     onChange={handleCuisineChange}
                     checked={isSelected}
-                    className=" bg-red-800 hidden peer   "
+                    className=" hidden peer   "
                   />
                    
                   {cuisine}
@@ -53,6 +53,7 @@ export default function CuisineFilter({
             );
           })}
         </div>
+        <button onClick={onExpandedClick} className="w-full capitalize hover:underline font-semibold hover:text-red-500 flex items-center justify-center" >{isExpanded?"view less":"view more "} </button>
       </div>
     </>
   );

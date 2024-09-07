@@ -34,3 +34,9 @@ export type restaurantSearchResponse={
         pages:number;
     }
 }
+export type cartType={
+    _id:string;
+    name:string;
+    price:number;
+    quantity:number;
+}

@@ -10,6 +10,7 @@ import ManageRestaurantPage from "./pages/manageRestaurant";
 import ManageProfile from "./form/manageProfile";
 import Layout from "./layoutPage/layout";
 import axios from "axios";
+import SingleDetailPage from "./components/singleDetailPage";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.baseURL = apiUrl;
@@ -37,7 +38,7 @@ function App() {
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
               <Route path="search/:city" element={<SearchPage/>} />
-              <Route path="detail/:id" element={<div>This is detail section</div>}  />
+              <Route path="detail/:restaurantId" element={<SingleDetailPage />}/>
             </Route>
           </Routes>
         </BrowserRouter>

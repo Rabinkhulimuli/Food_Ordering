@@ -10,7 +10,7 @@ export default function SubPage() {
 
   return (
     <div>
-      <div className=" z-0">
+      <div className=" z-0"> 
         <img
           className=" w-full object-cover max-h-[600px] "
           src="/hero.png"
@@ -22,7 +22,7 @@ export default function SubPage() {
             Tuck into a takeaway today
           </h2>
           <p className="text-xl">Food is just a click away!</p>
-          <SearchBox placeHolder="Search by City or Town eg. New York ,Manchester" onSubmit={handleSearchSubmit}/>
+          <SearchBox placeHolder="Search by City or Town eg. Manchester ,New York" onSubmit={handleSearchSubmit}/>
         </div>
       </div>
 

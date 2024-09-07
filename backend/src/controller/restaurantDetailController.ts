@@ -33,7 +33,7 @@ const searchRestaurant = async (req: Request, res: Response) => {
         { cuisines: { $in: [searchRegx] } },
       ];
     }
-    const pageSize = 10;
+    const pageSize = 5;
     const skip = (page - 1) * pageSize;
     const restaurant = await Restaurant.find(query)
       .sort({ [sortOption]: 1 })
@@ -55,6 +55,19 @@ const searchRestaurant = async (req: Request, res: Response) => {
     res.status(500).json({msg:err});
   }
 };
+const getRestaurantID= async(req:Request,res:Response)=> {
+  const restaurantID= req.params.restaurantId
+  try{
+    const restaurant = await Restaurant.findById(restaurantID);
+    if(!restaurant){
+      return res.status(404).json({message:"Restaurant not found"})
+    }
+    return res.status(200).json(restaurant);
+  }catch(err){
+    res.status(500).send("error occoured in restaurantID")
+  }
+}
 export {
-    searchRestaurant
+    searchRestaurant,
+    getRestaurantID
 }

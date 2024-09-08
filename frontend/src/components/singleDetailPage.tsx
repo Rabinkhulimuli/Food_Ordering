@@ -2,12 +2,51 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 import { useGetRestaurantId } from "../api/searchApi";
 import { cartType } from "../type";
+import OrderBook from "./orderbook";
+export type item={
+  _id:string;
+  name:string;
+  price:number;
+}
 export default function SingleDetailPage() {
     const [cartItem,setCartItem]= useState<cartType[]>([])
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurantId(restaurantId);
   if (isLoading || !restaurant) {
     return <div>Loading ...</div>;
+  }
+  const addToCart=(eh:item)=> {
+    setCartItem((prev)=> {
+      const existingItem= cartItem.find((item)=> item._id === eh._id);
+      let updatedItem;
+      if(existingItem){
+        updatedItem=prev.map((item)=> item._id===eh._id?{...item,quantity:item.quantity + 1}:item)
+      }else{
+        updatedItem=[
+          ...prev,{
+            _id:eh._id,
+            name:eh.name,
+            price:eh.price,
+            quantity:1
+          }
+        ]
+      }
+      return updatedItem
+    })
+      
+  }
+  const removeFromCart=(items:item)=> {
+        setCartItem((prev)=> {
+          const updatedCart= prev.filter((eh)=> eh._id != items._id)
+          return updatedCart
+        })
+  }
+  const subFromCart=(items:item)=> {
+    setCartItem((prev)=> {
+      let updatedCart= prev.map((item)=> item._id === items._id? {...item,quantity:item.quantity-1}:item)
+      updatedCart= updatedCart.filter((item)=> item.quantity != 0)
+      return updatedCart
+    })
   }
   return (
     <>
@@ -17,7 +56,8 @@ export default function SingleDetailPage() {
           className="aspect-[16/4] m-1 w-full h-full object-cover"
         />
       </div>
-      <div>
+      <div className=" grid md:grid-cols-[4fr_2fr] gap-5 md:px-32" >
+        <div>
         <div className="p-2 m-2 shadow-lg border rounded-lg bg-gray-100">
           <h1 className="text-2xl  font-bold tracking-tight">
             {restaurant.restaurantName}{" "}
@@ -35,20 +75,20 @@ export default function SingleDetailPage() {
         <div>
           <h2 className="text-xl font-bold tracking-tight">Menu</h2>
           {restaurant.menuItems.map((eh) => (
-            <div className="p-2 m-2 shadow-lg border rounded-lg bg-gray-100 font-semibold cursor-pointer">
+            <div onClick={()=> addToCart(eh)} className="p-2 m-2 shadow-lg border rounded-lg bg-gray-100 font-semibold cursor-pointer">
               <p>{eh.name}</p>
               <p>${(eh.price/100).toFixed(2) }</p>
-              <button className="" >Add</button>
+              
             </div>
           ))}
         </div>
-        <div>
-            <h2 className="text-xl font-bold tracking-tight">Your Order</h2>
-            <div className="">
-                    
-            </div>
-
         </div>
+        
+          <OrderBook  restaurant={restaurant}
+          cartItem={cartItem}
+          removeCart={(items)=> removeFromCart(items)}
+          subFromCart={(items)=> subFromCart(items)}
+          />
       </div>
     </>
   );

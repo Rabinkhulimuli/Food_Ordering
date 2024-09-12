@@ -24,7 +24,7 @@ export default function SearchBox({
   const method = useForm<SearchForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      searchQuery,
+      searchQuery:searchQuery ?? "",
     },
   });
   useEffect(() => {

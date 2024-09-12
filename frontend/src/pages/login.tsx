@@ -1,7 +1,7 @@
 
 import React from "react";
-import { useContext, FormEvent,useState } from "react";
-import { Navigate,Link } from "react-router-dom";
+import { useContext, FormEvent,useState, } from "react";
+import { Navigate,Link ,useSearchParams,useLocation} from "react-router-dom";
 import {Toaster,toast} from 'sonner'
 import {
   UserContext,
@@ -21,7 +21,8 @@ export interface formData {
 }
 export default function Login() {
   const [data1, setData] = useState<formData>({ email: " ", password: "" });
- 
+ const [searchParams]= useSearchParams()
+ const redirect= searchParams.get("redirect")
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setData((prev) => {
@@ -29,6 +30,7 @@ export default function Login() {
     });
   };
   const {setLogin, setUser} = useContext<UserContextType>(UserContext);
+  const {state}= useLocation()
   const {mutate,isPending,error,isError,isSuccess}= useMutation({
   mutationFn:loginUser,
   mutationKey:["login"],
@@ -51,7 +53,10 @@ export default function Login() {
 
 if(isSuccess){
   toast.message("Logged in Successfully")
-  return <Navigate to='/' />
+  if (redirect){
+
+  return <Navigate to={`${redirect}`}  state={state}/>
+  } else return <Navigate to ='/' />
 }
   return (
     <>

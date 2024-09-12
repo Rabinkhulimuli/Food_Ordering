@@ -3,14 +3,19 @@ import { useState } from "react";
 import { useGetRestaurantId } from "../api/searchApi";
 import { cartType } from "../type";
 import OrderBook from "./orderbook";
+import UserProfileForm from "../form/userProfileForm";
 export type item={
   _id:string;
   name:string;
   price:number;
 }
 export default function SingleDetailPage() {
-    const [cartItem,setCartItem]= useState<cartType[]>([])
   const { restaurantId } = useParams();
+    const [cartItem,setCartItem]= useState<cartType[]>(()=> {
+      const storedItem= sessionStorage.getItem(`cartItem-${restaurantId}`)
+      return storedItem ? JSON.parse(`cartItem-${restaurantId}`) : []
+    })
+
   const { restaurant, isLoading } = useGetRestaurantId(restaurantId);
   if (isLoading || !restaurant) {
     return <div>Loading ...</div>;
@@ -31,6 +36,7 @@ export default function SingleDetailPage() {
           }
         ]
       }
+      //sessionStorage.setItem(`cartItem-${restaurantId}`,JSON.stringify(cartItem))
       return updatedItem
     })
       
@@ -38,6 +44,7 @@ export default function SingleDetailPage() {
   const removeFromCart=(items:item)=> {
         setCartItem((prev)=> {
           const updatedCart= prev.filter((eh)=> eh._id != items._id)
+          //sessionStorage.setItem(`cartItem-${restaurantId}`,JSON.stringify(cartItem))
           return updatedCart
         })
   }
@@ -66,7 +73,7 @@ export default function SingleDetailPage() {
             {restaurant.city}, {restaurant.country}
           </p>
           {restaurant.menuItems.map((eh) => (
-            <span className="font-semibold">
+            <span className="font-semibold" key={eh._id}>
               <span className="w-2 h-2 bg-black inline-block rounded-xl"></span>{" "}
               {eh.name}{" "}
             </span>
@@ -75,7 +82,7 @@ export default function SingleDetailPage() {
         <div>
           <h2 className="text-xl font-bold tracking-tight">Menu</h2>
           {restaurant.menuItems.map((eh) => (
-            <div onClick={()=> addToCart(eh)} className="p-2 m-2 shadow-lg border rounded-lg bg-gray-100 font-semibold cursor-pointer">
+            <div key={eh._id} onClick={()=> addToCart(eh)} className="p-2 m-2 shadow-lg border rounded-lg bg-gray-100 font-semibold cursor-pointer">
               <p>{eh.name}</p>
               <p>${(eh.price/100).toFixed(2) }</p>
               
@@ -86,10 +93,12 @@ export default function SingleDetailPage() {
         
           <OrderBook  restaurant={restaurant}
           cartItem={cartItem}
+          setCartItem={setCartItem}
           removeCart={(items)=> removeFromCart(items)}
           subFromCart={(items)=> subFromCart(items)}
           />
       </div>
+      <UserProfileForm />
     </>
   );
 }

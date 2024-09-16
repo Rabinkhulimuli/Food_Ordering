@@ -1,4 +1,4 @@
-import React, { SetStateAction, useContext, useState ,useEffect} from "react";
+import React, { SetStateAction, useContext,useEffect} from "react";
 import { Link,useLocation } from "react-router-dom";
 import {
   UserContext,
@@ -9,10 +9,10 @@ import { cartType } from "../type";
 type Prop={
   cartItem:cartType[]
   setCartItem:React.Dispatch<SetStateAction<cartType[]>>
+  setToggle:React.Dispatch<SetStateAction<boolean>>
 }
-export default function Checkout({cartItem,setCartItem}:Prop) {
+export default function Checkout({cartItem,setCartItem,setToggle}:Prop) {
   const { login } = useContext<UserContextType>(UserContext);
-  const [toggle, setToggle] = useState(false);
   const {pathname,state}= useLocation();
   useEffect(()=> {
     if(state){
@@ -21,22 +21,24 @@ export default function Checkout({cartItem,setCartItem}:Prop) {
   },[state,setCartItem])
   
   const checkout = () => {
-    
+    if(login && cartItem.length !==0){
       setToggle(true);
+    }
+      
     
   };
   return (
     <>
       <div>
-        <button
+        {login && cartItem.length !== 0 && <button
           onClick={checkout}
-          disabled={!login ? true : false}
+          
           className="w-full bg-orange-500 hover:bg-orange-600 active:bg-orange-700 rounded-lg p-1 text-lg font-bold text-white"
         >
           Go To Check Out
-        </button>
-        {!login && (
-          <Link to={`/login?redirect=${pathname}`} state={cartItem} className="text-red-600 underline">
+        </button>}
+        {!login && cartItem.length !== 0 &&  (
+          <Link to={`/login?redirect=${pathname}`} state={cartItem} className=" flex text-center items-center justify-center bg-orange-500 hover:bg-orange-600 active:bg-orange-700 rounded-lg p-1 text-lg font-bold text-white underline">
             <b> Log In</b> to Checkout
           </Link>
         )}

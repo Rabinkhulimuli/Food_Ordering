@@ -8,13 +8,15 @@ export type Prop = {
   removeCart: (items: item) => void;
   subFromCart: (items: item) => void;
   setCartItem:React.Dispatch<SetStateAction<cartType[]>>
+  setToggle:React.Dispatch<SetStateAction<boolean>>
 };
 export default function OrderBook({
   restaurant,
   cartItem,
   removeCart,
   subFromCart,
-  setCartItem
+  setCartItem,
+  setToggle
 }: Prop) {
   const getTotalCost = () => {
     const totalInPence = cartItem.reduce(
@@ -60,7 +62,7 @@ export default function OrderBook({
           <span>Delivery Price</span>
           <span>${(restaurant.deliveryPrice / 100).toFixed(2)} </span>
         </span>
-        <Checkout setCartItem={setCartItem} cartItem={cartItem} />
+        <Checkout setCartItem={setCartItem} cartItem={cartItem} setToggle={setToggle}/>
       </div>
     </div>
   );

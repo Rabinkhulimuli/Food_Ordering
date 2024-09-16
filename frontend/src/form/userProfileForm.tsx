@@ -1,10 +1,27 @@
-
-export default function UserProfileForm(){
-
+import { useGetMyProfile } from "../api/apiList";
+import { Link } from "react-router-dom";
+import ProfileForm, { profileFormType } from "./profileForm";
+export default function UserProfileForm() {
+  const { response, isLoading } = useGetMyProfile();
+  const checkOut = (userFormData: profileFormType) => {
+    console.log(userFormData);
+  };
+  if (!response) {
     return (
-        <>
-            <h2>User Profile From</h2>
-
-        </>
-    )
+      <div>
+        log in to checkout<Link to="/login">Login</Link>
+      </div>
+    );
+  }
+  return (
+    <>
+      <ProfileForm
+        currentUser={response}
+        isLoading={isLoading}
+        onSave={checkOut}
+        title="confirm delivery details"
+        buttonText="continue to payment"
+      />
+    </>
+  );
 }

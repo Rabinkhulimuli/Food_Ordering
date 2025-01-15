@@ -2,7 +2,8 @@ import { auth } from "express-oauth2-jwt-bearer";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import user from "../model/modelSchema";
-
+import NUser from "../model/modelSchema"
+const jwtSecret = process.env.JWT_SECRET as string;
 declare global {
   namespace Express {
     interface Request {
@@ -12,12 +13,12 @@ declare global {
   }
 }
 
-export const jwtCheck = auth({
-  audience: process.env.AUTH0_AUDIENCE,
-  issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
-  tokenSigningAlg: "RS256",
-});
-
+export const jwtCheck = ()=> {
+  if (!jwtSecret) {
+    throw new Error("JWT_SECRET environment variable is not defined");
+  }
+  
+}
 export const jwtParse = async (
   req: Request,
   res: Response,
@@ -25,26 +26,26 @@ export const jwtParse = async (
 ) => {
   const { authorization } = req.headers;
 
-  if (!authorization || !authorization.startsWith("Bearer ")) {
-    return res.sendStatus(401);
+  if(!authorization || !authorization.startsWith("Bearer")){
+    res.status(404).json("token wasnt found")
   }
 
   // Bearer lshdflshdjkhvjkshdjkvh34h5k3h54jkh
-  const token = authorization.split(" ")[1];
+  const token= authorization?.split(" ")[1] as string
 
   try {
-    const decoded = jwt.decode(token) as jwt.JwtPayload;
-    const auth0Id = decoded.sub;
+    jwt.verify(token, jwtSecret, async (err: Error | null, user: any) => {
+      if (err || !user) {
+        return res.status(401).json({ msg: "Invalid token", error: err?.message });
+      }
 
-    const User = await user.findOne({ auth0Id });
+      const Duser = await NUser.findById(user.id);
+      req.auth0Id = Duser?.id as string;
+      req.userId = Duser?.id.toString();
+      next();
+    });
 
-    if (!User) {
-      return res.sendStatus(401);
-    }
-
-    req.auth0Id = auth0Id as string;
-    req.userId = User._id.toString();
-    next();
+   
   } catch (error) {
     return res.sendStatus(401);
   }

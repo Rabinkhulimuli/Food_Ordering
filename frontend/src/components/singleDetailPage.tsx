@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useGetRestaurantId } from "../api/searchApi";
 import { cartType } from "../type";
 import OrderBook from "./orderbook";
-import UserProfileForm from "../form/userProfileForm";
 import { useCreateCheckoutSession } from "../api/orderApi";
 import { profileFormType } from "../form/profileForm";
+import Checkout from "./checkOut";
 export type item = {
   _id: string;
   name: string;
@@ -13,15 +13,16 @@ export type item = {
 };
 export default function SingleDetailPage() {
   const { restaurantId } = useParams();
-  const [toggle, setToggle] = useState(false);
-  const {createCheckoutSession,isPending:isCheckoutLoading}= useCreateCheckoutSession()
+
+  const { createCheckoutSession, isPending: isCheckoutLoading } =
+    useCreateCheckoutSession();
   const [cartItem, setCartItem] = useState<cartType[]>(() => {
-  const storedItem = sessionStorage.getItem(`cartItem-${restaurantId}`);
+    const storedItem = sessionStorage.getItem(`cartItem-${restaurantId}`);
     return storedItem ? JSON.parse(`cartItem-${restaurantId}`) : [];
   });
 
   const { restaurant, isLoading } = useGetRestaurantId(restaurantId);
-  
+
   const addToCart = (eh: item) => {
     setCartItem((prev) => {
       const existingItem = cartItem.find((item) => item._id === eh._id);
@@ -61,30 +62,29 @@ export default function SingleDetailPage() {
       return updatedCart;
     });
   };
- const onCheckout=async(userFormData:profileFormType)=> {
-  console.log("userFormData",userFormData)
-  if(!restaurant){
-    return
-  }
-  const checkoutData={
-    cartItems:cartItem.map((cartItem)=> ({
-      menuItemId:cartItem._id,
-      name:cartItem.name,
-      quantity:cartItem.quantity.toString(),
-
-    })),
-    restaurantId:restaurant?._id,
-    deliveryDetails:{
-      name:userFormData.name,
-      addressLine1:userFormData.addressLine1,
-      city:userFormData.city,
-      country:userFormData.country,
-      email:userFormData.email as string
+  const onCheckout = async (userFormData: profileFormType) => {
+    console.log("userFormData", userFormData);
+    if (!restaurant) {
+      return;
     }
-  }
-  const data= await createCheckoutSession(checkoutData)
-  window.location.href=data.url
- }
+    const checkoutData = {
+      cartItems: cartItem.map((cartItem) => ({
+        menuItemId: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity.toString(),
+      })),
+      restaurantId: restaurant?._id,
+      deliveryDetails: {
+        name: userFormData.name,
+        addressLine1: userFormData.addressLine1,
+        city: userFormData.city,
+        country: userFormData.country,
+        email: userFormData.email as string,
+      },
+    };
+    const data = await createCheckoutSession(checkoutData);
+    window.location.href = data.url;
+  };
   if (isLoading || !restaurant) {
     return <div>Loading ...</div>;
   }
@@ -127,33 +127,46 @@ export default function SingleDetailPage() {
           </div>
         </div>
 
-        <OrderBook
+        
+        
+        
+      </div>
+      <div
+        className="my-2 shadow-md bg-gray-100 border px-2 py-4 rounded-lg h-fit "
+        >
+          <OrderBook
           restaurant={restaurant}
           cartItem={cartItem}
           setCartItem={setCartItem}
           removeCart={(items) => removeFromCart(items)}
           subFromCart={(items) => subFromCart(items)}
-          setToggle={setToggle}
+          
         />
-      </div>
-      <div
-        className={`fixed  w-full  top-0 h-fit p-2 rounded-lg backdrop-blur-sm ${
-          !toggle ? "hidden" : "block"
-        }`}
-      >
-        
-        <div className="my-32 flex flex-row items-center justify-center self-center ">
-        
-          <div>
-          <button
-          onClick={() => setToggle(!toggle)}
-          className=" float-right mr-4 mt-2  shadow rounded-md bg-red-500 text-white font-bold px-2"
-        >
-          xo
-        </button>
-          <UserProfileForm />
-          </div>
+        <Checkout
+        setCartItem={setCartItem}
+        cartItem={cartItem}
+       
+        onCheckout={onCheckout}
+        isLoading={isCheckoutLoading}
+        />
         </div>
+
+      <div
+       
+      >
+        {/* <div className="my-32 flex flex-row items-center justify-center self-center ">
+          <div>
+            <button
+              onClick={() => setToggle(!toggle)}
+              className=" float-right mr-4 mt-2  shadow rounded-md bg-red-500 text-white font-bold px-2"
+            >
+              xo
+            </button>
+            <UserProfileForm 
+            onSave={onCheckout}
+            />
+          </div>
+        </div> */}
       </div>
     </>
   );

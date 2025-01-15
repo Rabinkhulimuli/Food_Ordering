@@ -1,7 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation} from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "sonner";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 type CheckoutSessionRequest = {
   cartItems: {
@@ -18,40 +18,44 @@ type CheckoutSessionRequest = {
   restaurantId: string;
 };
 
+type CheckoutSessionResponse = {
+  sessionId: string;
+  url: string;
+};
+
 export const useCreateCheckoutSession = () => {
-  const token = localStorage.getItem("token");
+  try{
+    const token = localStorage.getItem("token");
+  
   const createCheckoutSessionRequest = async (
     checkoutSessionRequest: CheckoutSessionRequest
-  ) => {
-    const res = await axios.post(
-      `${API_BASE_URL}/api/order/checkout/create-checkout-session`,
+  ): Promise<CheckoutSessionResponse> => {
+    const response = await axios.post(
+      `/api/order/checkout/create-checkout-session`,
       checkoutSessionRequest,
       {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
-        }
-        
+        },
       }
     );
-    return res.data;
+    return response.data;
   };
-  const {
-    mutateAsync: createCheckoutSession,
-    isPending,
-   error,
-    reset,
-  } = useMutation(createCheckoutSessionRequest,{
-    onError:(err:any)=> {
-        toast.error(err?.message || "Error creating checkout session");
 
-    }
-  });
-
+  const {mutateAsync:createCheckoutSession,isPending,error,reset} = useMutation(
+   {mutationFn: createCheckoutSessionRequest,
+    mutationKey:["checkout session"]
+   }
+  );
   if (error) {
-   
+    toast.error(error.toString());
     reset();
   }
-
-  return { createCheckoutSession, isPending };
+  return {createCheckoutSession,isPending}
+  }catch(err){
+    console.log(err)
+    throw new Error("error in create checkout session api")
+  }
+  
 };

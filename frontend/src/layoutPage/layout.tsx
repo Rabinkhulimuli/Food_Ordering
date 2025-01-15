@@ -14,7 +14,7 @@ export default function Layout(){
     useSearchRequest(searchState)
     return (
         <>
-        <Header/>
+        <Header />
         <Outlet  />
         <Footer/>
         </>

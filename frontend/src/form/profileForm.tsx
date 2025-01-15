@@ -116,7 +116,7 @@ export default function ProfileForm({
               </div>
             )}
           />
-          <div className="flex gap-4 justify-between">
+          <div className="flex gap-4 justify-between truncate">
             <Controller
               name="addressLine1"
               control={control}

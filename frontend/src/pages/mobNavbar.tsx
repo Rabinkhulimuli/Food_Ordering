@@ -23,9 +23,9 @@ const {login}= useContext(UserContext)
         <div className="fixed z-10 top-0 right-0 transform trnasition-transform duration-300  md:hidden flex-col w-1/2 right-0 ml-auto ">
           {change && (
             <div className="  w-full    bg-gray-500 flex flex-col items-center md:hidden border-l-4 border-solid border-orange-700  h-screen ">
-              <div className=" py-16 bg-orange-600 text-white w-full flex items-center justify-center text-xl  text-center tracking-tight font-bold capitalize">
+              <Link to='/' className=" py-16 bg-orange-600 text-white w-full flex items-center justify-center text-xl  text-center tracking-tight font-bold capitalize">
                 Wellcome to EatMuch.com{" "}
-              </div>
+              </Link>
 
               <button
                 className=" w-full text-center hover:bg-orange-500  font-bold text-gray-100 py-2 text-lg capitalize border-b-4 border-orange-800 pointer"

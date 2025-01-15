@@ -7,8 +7,8 @@ export type Prop = {
   cartItem: cartType[];
   removeCart: (items: item) => void;
   subFromCart: (items: item) => void;
-  setCartItem:React.Dispatch<SetStateAction<cartType[]>>
-  setToggle:React.Dispatch<SetStateAction<boolean>>
+  setCartItem: React.Dispatch<SetStateAction<cartType[]>>;
+  setToggle: React.Dispatch<SetStateAction<boolean>>;
 };
 export default function OrderBook({
   restaurant,
@@ -16,7 +16,7 @@ export default function OrderBook({
   removeCart,
   subFromCart,
   setCartItem,
-  setToggle
+  setToggle,
 }: Prop) {
   const getTotalCost = () => {
     const totalInPence = cartItem.reduce(
@@ -44,7 +44,7 @@ export default function OrderBook({
             <span className="inline-flex items-center gap-2">
               <img
                 onClick={() => subFromCart(item)}
-                src="/remove.png"
+                src="/minus.webp"
                 className="w-4 cursor-pointer active:shadow-xl"
               />
               <div> {(item.price / 100).toFixed(2)} </div>
@@ -62,7 +62,11 @@ export default function OrderBook({
           <span>Delivery Price</span>
           <span>${(restaurant.deliveryPrice / 100).toFixed(2)} </span>
         </span>
-        <Checkout setCartItem={setCartItem} cartItem={cartItem} setToggle={setToggle}/>
+        <Checkout
+          setCartItem={setCartItem}
+          cartItem={cartItem}
+          setToggle={setToggle}
+        />
       </div>
     </div>
   );

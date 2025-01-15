@@ -46,7 +46,7 @@ export default function Register() {
   return (
     <>
       
-      <div className="w-full h-screen flex  items-center justify-center">
+      <div className="w-full -my-16 h-screen flex  items-center justify-center">
         <div className="  w-80  rounded-xl border border-4 shadow-lg bg-orange-50">
           <h2 className=" w-full bg-white rounded-2xl shadow-xl py-8 text-center  text-2xl font-black text-orange-700 border-b-2 border-orange-800">
             Create a new account
@@ -62,7 +62,7 @@ export default function Register() {
                 value={data1.email}
                 onChange={handleChange}
                 required
-                className="border-b-2 border-gray-500 rounded-md block w-1/2 hover:bg-gray-100  w-full"
+                className="border-b-2 px-2 border-gray-500 rounded-md block w-1/2 hover:bg-gray-100  w-full"
               />
             </div>
             <div>
@@ -74,10 +74,10 @@ export default function Register() {
                 value={data1.password}
                 onChange={handleChange}
                 required
-                className="border-b-2 border-gray-500 rounded-md block w-1/2 hover:bg-gray-100   w-full"
+                className="border-b-2 px-2 border-gray-500 rounded-md block w-1/2 hover:bg-gray-100   w-full"
               />
             </div>
-            <div className=" w-full text-center tracking-tight text-red-600 font-bold text-lg mt-1 ">
+            <div className=" w-full text-center tracking-tight text-red-600 font-bold text-lg  mt-1 ">
               {isError ? JSON.stringify(error.message) : ""}{" "}
             </div>
             <button

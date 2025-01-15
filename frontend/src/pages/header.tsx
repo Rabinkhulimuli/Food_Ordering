@@ -39,8 +39,9 @@ export default function Header() {
   };
   return (
     <>
-      <div className=" ">
-        <div className="  border-b-4 border-orange-700  bg-white flex items-center justify-between space-between">
+      <div className="">
+        
+        <div className="  border-b-4  border-orange-700  bg-white flex items-center justify-between space-between">
           <div
             onClick={() => navigate("/")}
             className="p-8 text-2xl  text-orange-700 font-black tracking-tight cursor-pointer"
@@ -62,15 +63,18 @@ export default function Header() {
               <div className="flex flex-col items-center justify-center">
                 <div
                   className=" cursor-pointer my-2 mx-12 "
-                  onClick={() => setToggle(!toggle)}
+                  
                 >
                   <span className="mx-4 text-lg hover:text-orange-500 font-bold">
                     Order Status
                   </span>
-                  <img src="/user1.png" className=" w-6 inline mx-1"></img>
+                  <span onClick={() => setToggle(!toggle)}>
+                    <img src="/user1.png" className=" w-6 inline mx-1"></img>
                   <span className="hover:text-orange-500 font-bold">
                     {user.email}{" "}
                   </span>
+                  </span>
+                  
                 </div>
                 {toggle && (
                   <div className="z-1 absolute top-20 flex flex-col items-center justify-center border-4 border-orange-700  rounded-md bg-white p-1">
@@ -113,7 +117,8 @@ export default function Header() {
           setChange={setChange}
           handleLogout={handleLogout}
         />
-      </div>
+        </div>
+      
       <Toaster richColors />
     </>
   );

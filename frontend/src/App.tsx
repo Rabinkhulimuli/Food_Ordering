@@ -39,6 +39,7 @@ function App() {
               <Route path="login" element={<Login />} />
               <Route path="search/:city" element={<SearchPage/>} />
               <Route path="detail/:restaurantId" element={<SingleDetailPage />}/>
+              
             </Route>
           </Routes>
         </BrowserRouter>

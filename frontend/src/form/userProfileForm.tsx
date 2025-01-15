@@ -15,6 +15,7 @@ export default function UserProfileForm() {
   }
   return (
     <>
+    <div className=' -my-8' >
       <ProfileForm
         currentUser={response}
         isLoading={isLoading}
@@ -22,6 +23,8 @@ export default function UserProfileForm() {
         title="confirm delivery details"
         buttonText="continue to payment"
       />
+    </div>
+      
     </>
   );
 }

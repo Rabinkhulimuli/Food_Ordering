@@ -13,14 +13,16 @@ import{v2 as cloudinary} from 'cloudinary'
 import orderRoutes from "../src/router/orderRoutes"
 
 dotenv.config()
-app.use(express.json());
+
 app.use(cors({
   origin: process.env.FRONTEND_API_URL as string, 
   credentials: true, 
 }))
+
+
+app.use("/api/order/checkbox/webhook",express.raw({type:"*/*"}))
+app.use(express.json());
 app.use(cookieParser())
-
-
 app.use("/user", task);
 app.use('/api/my/restaurant',myRestaurantRoute)
 app.use('/api/restaurant',restaurantDetails)

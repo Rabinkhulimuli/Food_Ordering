@@ -4,9 +4,11 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "concurrently \"nodemon\" \"npm run stripe\"", 
+    "stripe":"stripe listen --forward-to localhost:5000/api/checkout/webhook",
     "build": "npm install && npx tsc",
     "start": "node dist/index.js"
+
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
     "@types/multer": "^1.4.11",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^2.4.0",
+    "concurrently": "^9.1.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

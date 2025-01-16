@@ -25,7 +25,7 @@ export const jwtParse = async (
   next: NextFunction
 ) => {
   const { authorization } = req.headers;
-
+  
   if(!authorization || !authorization.startsWith("Bearer")){
     res.status(404).json("token wasnt found")
   }
@@ -40,8 +40,10 @@ export const jwtParse = async (
       }
 
       const Duser = await NUser.findById(user.id);
-      req.auth0Id = Duser?.id as string;
-      req.userId = Duser?.id.toString();
+      if(!Duser){
+        res.status(404).json("user not found")
+      }
+      req.userId=Duser?.id
       next();
     });
 

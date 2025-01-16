@@ -10,7 +10,7 @@ import connectDB from './db/connectDb'
 const PORT=process.env.PORT 
 import {Request,Response} from 'express'
 import{v2 as cloudinary} from 'cloudinary'
-import orderRoutes from "../src/router/orderRoutes"
+import orderRoutes from "./router/orderRoutes"
 
 dotenv.config()
 

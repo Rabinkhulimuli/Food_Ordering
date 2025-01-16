@@ -14,6 +14,9 @@ export interface postResponse {
   email: string;
   password: string;
 }
+
+
+
 export const postUser = async (data1: postResponse): Promise<postResponse> => {
   try {
     const { data } = await axios.post("/user/my-user", data1);

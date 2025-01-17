@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Stripe from "stripe";
 import Restaurant from "../model/resturant";
+import NUser from '../model/modelSchema';
 import { MenuItemType } from "../model/resturant";
 import Order from "../model/order";
 
@@ -61,15 +62,12 @@ const createCheckOutSession = async (req: Request, res: Response) => {
     const restaurant = await Restaurant.findById(
       checkoutSessionRequest.restaurantId
     );
-    if (!restaurant) {
+   
+    if (!restaurant ) {
       throw new Error("Restaurant not found");
     }
-    console.log(
-      "checkoutSession request::",
-      checkoutSessionRequest.deliveryDetails
-    );
     const newOrder = new Order({
-      restaurant: restaurant,
+      restaurant: restaurant._id,
       user: req.userId,
       status: "placed",
       deliveryDetails: checkoutSessionRequest.deliveryDetails,
@@ -88,7 +86,7 @@ const createCheckOutSession = async (req: Request, res: Response) => {
       deliveryPrice,
       restaurant._id.toString()
     );
-    console.log("Stripe Session URL:", session.url);
+    
 
     if (!session.url) {
       return res.status(500).json({ message: "Error creating Stripe session" });
@@ -156,6 +154,7 @@ const createSession = async (
 
 const getMyOrder = async (req: Request, res: Response) => {
   try {
+   
     const orders = await Order.find({ user: req.userId })
       .populate("restaurant")
       .populate("user");

@@ -41,14 +41,14 @@ export const jwtParse = async (
 
       const Duser = await NUser.findById(user.id);
       if(!Duser){
-        res.status(404).json("user not found")
+        return res.status(404).json("user not found")
       }
-      req.userId=Duser?.id
+      req.userId=Duser.id.toString()
       next();
     });
 
    
-  } catch (error) {
-    return res.sendStatus(401);
+  } catch (error:any) {
+    return res.status(401).json({ message: "Invalid token", error: error.message })
   }
 };

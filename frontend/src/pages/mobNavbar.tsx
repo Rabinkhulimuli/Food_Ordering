@@ -36,6 +36,14 @@ const {login}= useContext(UserContext)
 
               {login && (
                 <div className="w-full">
+                  <Link to="/orderStatus" 
+                   onClick={() => setChange(() => false)}
+                   className=" block w-full text-center font-bold text-gray-100 py-2 text-lg capitalize hover:bg-orange-500  border-b-4 border-orange-800 "
+                  >
+                  <span  >
+                    Order Status
+                  </span>
+                  </Link>
                   <Link
                     to="/my-restaurant"
                     onClick={() => setChange(() => false)}

@@ -3,7 +3,7 @@ import { createCheckOutSession,stripeWebhookHandler,getMyOrder } from '../contro
 import { jwtCheck,jwtParse } from '../middleware/auth';
 const router = express.Router();
 
-router.route("/checkout/create-checkout-session").post(createCheckOutSession)
+router.route("/checkout/create-checkout-session").post(jwtParse,createCheckOutSession)
 router.route("/checkout/webhook").post(jwtParse,stripeWebhookHandler)
 router.route("/").get(jwtParse,getMyOrder)
 export default router

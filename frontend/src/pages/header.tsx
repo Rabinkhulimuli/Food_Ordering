@@ -65,9 +65,12 @@ export default function Header() {
                   className=" cursor-pointer my-2 mx-12 "
                   
                 >
-                  <span className="mx-4 text-lg hover:text-orange-500 font-bold">
+                  <Link to="/orderStatus" >
+                  <span  className="mx-4 text-lg hover:text-orange-500 font-bold">
                     Order Status
                   </span>
+                  </Link>
+                  
                   <span onClick={() => setToggle(!toggle)}>
                     <img src="/user1.png" className=" w-6 inline mx-1"></img>
                   <span className="hover:text-orange-500 font-bold">

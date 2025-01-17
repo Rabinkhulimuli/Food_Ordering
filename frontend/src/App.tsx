@@ -11,6 +11,7 @@ import ManageProfile from "./form/manageProfile";
 import Layout from "./layoutPage/layout";
 import axios from "axios";
 import SingleDetailPage from "./components/singleDetailPage";
+import OrderStatusPage from "./pages/OrderStatusPage";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.baseURL = apiUrl;
@@ -33,6 +34,7 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="profile" element={<ManageProfile />} />
                 <Route path="my-restaurant" element={<ManageRestaurantPage />} />
+                <Route  path="orderStatus"  element={<OrderStatusPage/>} />
               </Route>
              
               <Route path="register" element={<Register />} />

@@ -1,8 +1,10 @@
 import mongoose from "mongoose"
-
+import NUser from "./modelSchema"
 const orderSchema=new mongoose.Schema({
-    restaurant:{type:mongoose.Schema.Types.ObjectId,ref:"Restaurant"},
-    user:{type:mongoose.Schema.Types.ObjectId,ref:"NUser"},
+    restaurant:{type:mongoose.Schema.Types.ObjectId,ref:"Restaurant",required:true},
+    user:{
+            type:mongoose.Schema.Types.ObjectId,ref:"NUser",required:true
+        },
     deliveryDetails:{
         email:{type:String,required:true},
         name:{type:String,required:true},

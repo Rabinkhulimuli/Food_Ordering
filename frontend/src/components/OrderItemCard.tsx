@@ -3,8 +3,9 @@ import { Order, orderStatus } from "../type";
 import { useUpdateMyrestaurantOrder } from "../api/myRestroApi";
 type Props = {
   order: Order;
+  key:string
 };
-function OrderItemCard({ order }: Props) {
+function OrderItemCard({ order,key }: Props) {
   const [status, setStatus] = useState<orderStatus>(order.status);
   useEffect(()=>{
     setStatus(order.status)
@@ -27,7 +28,7 @@ function OrderItemCard({ order }: Props) {
     setStatus(newStatus);
   };
   return (
-    <div>
+    <div key={key} >
       <div className="grid md:grid-cols-4 gap-4 justify-between mb-3">
         <div>
           <span>Customer Name</span>

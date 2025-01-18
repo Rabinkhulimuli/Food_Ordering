@@ -18,7 +18,7 @@ function ManageOrder() {
          className="text-2xl font-bold"
         >{Orders.length} active orders </h2>
       {Orders.map((order)=> (
-        <OrderItemCard order={order}/>
+        <OrderItemCard order={order} key={order._id}  />
       ))}
     </div>
   )

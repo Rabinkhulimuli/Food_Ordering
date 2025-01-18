@@ -48,7 +48,7 @@ const loggin = async (req: Request, res: Response) => {
 
     const token= jwt.sign({email:user.email,id:user._id},jwtSecret)
 
-      res.status(200).json({ email: user.email, id: user._id,token: token });
+      return res.status(200).json({ email: user.email, id: user._id,token: token });
     ;
   } catch (err) {
     console.error("Error logging in:", err);
@@ -76,9 +76,9 @@ const updateProfile = async (req: Request, res: Response) => {
       if (Duser && Duser.email === user.email) {
         Duser.set(data);
         await Duser.save();
-        res.status(200).json(Duser);
+        return res.status(200).json(Duser);
       } else {
-        res.status(401).json({ msg: "Unauthorized to update this profile" });
+        return res.status(401).json({ msg: "Unauthorized to update this profile" });
       }
     });
   } catch (err) {

@@ -34,16 +34,23 @@ const stripeWebhookHandler = async (req: Request, res: Response) => {
       STRIPE_ENDPOINT_SECRET
     );
   } catch (err: any) {
-    res.status(400).send(`Webhook Error: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   if (event?.type === "checkout.session.completed") {
-    const order = await Order.findById(event.data.object.metadata?.orderId);
-
+    const session = event.data.object as Stripe.Checkout.Session;
+    console.log("Stripe session object:", event.data.object);
+    const order = await Order.findById(session.metadata?.orderId);
+    console.log("OrderAmount:",order?.totalAmount)
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
-    order.totalAmount = event.data.object.amount_total;
+    order.totalAmount = session.amount_total;
+    if (!session.amount_total) {
+      console.error("Error: Stripe session amount_total is undefined");
+      return;
+    }
+    console.log("OrderAmount:",event.data.object.amount_subtotal)
     order.status = "Paid";
     await order.save();
   }
@@ -92,10 +99,10 @@ const createCheckOutSession = async (req: Request, res: Response) => {
       return res.status(500).json({ message: "Error creating Stripe session" });
     }
     await newOrder.save();
-    res.json({ url: session.url });
+    return res.json({ url: session.url });
   } catch (err: any) {
     console.error("Error:", err.message);
-    res.status(500).json({
+   return res.status(500).json({
       message: err.raw?.message || err.message || "An error occurred",
     });
   }
@@ -111,7 +118,7 @@ const createLineItems = (
 
   return checkoutSessionRequest.cartItems.map((cartItem) => {
     const menuItem = menuItems.find(
-      (item) => item._id.toString() === cartItem.menuItemId.toString()
+      (item) => item._id?.toString() === cartItem.menuItemId?.toString()
     );
     if (!menuItem) {
       throw new Error(`Menu item not found: ${cartItem.menuItemId}`);
@@ -119,7 +126,7 @@ const createLineItems = (
 
     return {
       price_data: {
-        currency: "USD",
+        currency: "usd",
         unit_amount: menuItem.price, // Ensure this is in cents
         product_data: { name: menuItem.name },
       },
@@ -141,15 +148,16 @@ const createSession = async (
         shipping_rate_data: {
           display_name: "Delivery",
           type: "fixed_amount",
-          fixed_amount: { amount: deliveryPrice, currency: "USD" },
+          fixed_amount: { amount: deliveryPrice, currency: "usd" },
         },
       },
     ],
     mode: "payment",
-    metadata: { orderId, restaurantId },
+    metadata: { orderId:orderId, restaurantId:restaurantId },
     success_url: `${FRONTEND_URL}/order-status?success=true`,
     cancel_url: `${FRONTEND_URL}/detail/${restaurantId}?cancelled=true`,
   });
+
 };
 
 const getMyOrder = async (req: Request, res: Response) => {

@@ -1,7 +1,8 @@
 import express from 'express'
 import multer from 'multer'
-import { createResturant,getRestaurant,updateRestaurant } from '../controller/resturantController'
+import { createResturant,getMyRestaurantOrder,getRestaurant,updateOrderStatus,updateRestaurant } from '../controller/resturantController'
 import { validateMyRestaurantRequest } from '../middleware/validation'
+import { jwtParse } from '../middleware/auth'
 const router= express.Router()
 const storage= multer.memoryStorage()
 const upload=multer({
@@ -14,5 +15,7 @@ const upload=multer({
 router.route('/').post(upload.single("imageFile"),validateMyRestaurantRequest,createResturant)
 .get(getRestaurant)
 .put(upload.single("imageFile"),validateMyRestaurantRequest,updateRestaurant)
+router.route("/order").get(jwtParse,getMyRestaurantOrder)
+router.route("/order/:orderId/status").patch(jwtParse,updateOrderStatus)
 
 export default router

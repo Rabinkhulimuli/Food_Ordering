@@ -12,6 +12,8 @@ import Layout from "./layoutPage/layout";
 import axios from "axios";
 import SingleDetailPage from "./components/singleDetailPage";
 import OrderStatusPage from "./pages/OrderStatusPage";
+import ManageRestaurantLayout from "./pages/manageRestaurantLayout";
+import ManageOrder from "./pages/ManageOrder";
 
 const apiUrl = import.meta.env.VITE_API_BASE_URL;
 axios.defaults.baseURL = apiUrl;
@@ -22,26 +24,30 @@ function App() {
       <AppQuery>
         <BrowserRouter>
           <Routes>
-            
             <Route element={<Layout />}>
-            <Route
-              path="/"
-              element={
-                <SubPage />
-                
-              }
-            />
+              <Route path="/" element={<SubPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="profile" element={<ManageProfile />} />
-                <Route path="my-restaurant" element={<ManageRestaurantPage />} />
-                <Route  path="orderStatus"  element={<OrderStatusPage/>} />
+                <Route
+                  path="my-restaurant"
+                  element={<ManageRestaurantLayout />}
+                >
+                  <Route  path="order"  element={<ManageOrder />} />
+                  <Route
+                    path="manageRestaurant"
+                    element={<ManageRestaurantPage />}
+                  />
+                </Route>
+                <Route path="orderStatus" element={<OrderStatusPage />} />
               </Route>
-             
+
               <Route path="register" element={<Register />} />
               <Route path="login" element={<Login />} />
-              <Route path="search/:city" element={<SearchPage/>} />
-              <Route path="detail/:restaurantId" element={<SingleDetailPage />}/>
-              
+              <Route path="search/:city" element={<SearchPage />} />
+              <Route
+                path="detail/:restaurantId"
+                element={<SingleDetailPage />}
+              />
             </Route>
           </Routes>
         </BrowserRouter>

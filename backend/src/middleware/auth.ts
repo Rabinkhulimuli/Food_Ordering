@@ -27,7 +27,7 @@ export const jwtParse = async (
   const { authorization } = req.headers;
   
   if(!authorization || !authorization.startsWith("Bearer")){
-    res.status(404).json("token wasnt found")
+    return res.status(404).json("token wasnt found")
   }
 
   // Bearer lshdflshdjkhvjkshdjkvh34h5k3h54jkh

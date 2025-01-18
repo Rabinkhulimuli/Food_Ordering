@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { useGetRestaurantId } from "../api/searchApi";
 import { cartType } from "../type";
@@ -13,7 +13,9 @@ export type item = {
 };
 export default function SingleDetailPage() {
   const { restaurantId } = useParams();
-
+  const [searchParams]=useSearchParams()
+  const cancelled=searchParams.get("cancelled")
+  
   const { createCheckoutSession, isPending: isCheckoutLoading } =
     useCreateCheckoutSession();
   const [cartItem, setCartItem] = useState<cartType[]>(() => {
@@ -87,6 +89,11 @@ export default function SingleDetailPage() {
   };
   if (isLoading || !restaurant) {
     return <div>Loading ...</div>;
+  }
+  if (cancelled ==="true"){
+    return <h1>You cancelled the order. <br /><br />
+    Go to <Link to="/">HomePage </Link>
+     </h1>
   }
   return (
     <>

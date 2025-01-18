@@ -8,7 +8,7 @@ import Order from "../model/order";
 const STRIPE = new Stripe(process.env.STRIPE_API_KEY || "your_test_key", {
   apiVersion: "2024-06-20",
 });
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+const FRONTEND_URL = process.env.FRONTEND_API_URL ;
 const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_WEBHOOK_SECRET as string;
 type CheckoutSessionRequest = {
   cartItems: {

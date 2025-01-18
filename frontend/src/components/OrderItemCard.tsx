@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Order, orderStatus } from "../type";
 import { useUpdateMyrestaurantOrder } from "../api/myRestroApi";
 type Props = {
@@ -6,6 +6,9 @@ type Props = {
 };
 function OrderItemCard({ order }: Props) {
   const [status, setStatus] = useState<orderStatus>(order.status);
+  useEffect(()=>{
+    setStatus(order.status)
+  },[order.status])
   const getTime = () => {
     const orderDateTime = new Date(order.createdAt);
     const hour = orderDateTime.getHours();

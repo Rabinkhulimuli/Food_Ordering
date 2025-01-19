@@ -39,18 +39,14 @@ const stripeWebhookHandler = async (req: Request, res: Response) => {
 
   if (event?.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    console.log("Stripe session object:", event.data.object);
+   
     const order = await Order.findById(session.metadata?.orderId);
-    console.log("OrderAmount:",order?.totalAmount)
+   
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
     order.totalAmount = session.amount_total;
-    if (!session.amount_total) {
-      console.error("Error: Stripe session amount_total is undefined");
-      return;
-    }
-    console.log("OrderAmount:",event.data.object.amount_subtotal)
+    
     order.status = "Paid";
     await order.save();
   }

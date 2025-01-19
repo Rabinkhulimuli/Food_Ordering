@@ -30,7 +30,7 @@ export default function CuisineFilter({
           {cuisineList.slice(0,isExpanded? cuisineList.length:7).map((cuisine) => {
             const isSelected = sellectedCuisines.includes(cuisine);
             return (
-            <div key={cuisine} className={`p-1 m-1 border rounded-lg shadow  ${isSelected? " border border-2 border-orange-700 font-semibold text-green-600":""}`}>
+            <div key={cuisine} className={`p-1 m-1 border rounded-lg shadow  ${isSelected? " border  border-orange-700 font-semibold text-green-600":""}`}>
                
                 <label className=" flex gap-2 items-center px-2">
                   <input

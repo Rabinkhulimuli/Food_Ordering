@@ -51,7 +51,7 @@ const searchRestaurant = async (req: Request, res: Response) => {
       }
       res.status(200).json(response)
   } catch (err) {
-    console.log(err)
+   
     res.status(500).json({msg:err});
   }
 };

@@ -35,7 +35,7 @@ export const useGetMyOrder = () => {
       return data;
     
   } catch (err) {
-    console.log(err);
+ 
     throw new Error("Error in order api")
   }
 
@@ -87,7 +87,7 @@ export const useCreateCheckoutSession = () => {
     }
     return { createCheckoutSession, isPending };
   } catch (err) {
-    console.log(err);
+    
     throw new Error("error in create checkout session api");
   }
 };

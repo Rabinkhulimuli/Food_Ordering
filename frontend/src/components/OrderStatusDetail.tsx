@@ -4,6 +4,7 @@ type Props={
     order:Order
 }
 function OrderStatusDetail({order}:Props) {
+ 
   return (
     <div
     className="space-y-10"

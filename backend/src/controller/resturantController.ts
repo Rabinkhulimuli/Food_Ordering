@@ -46,7 +46,7 @@ const createResturant = async (req: Request, res: Response) => {
       res.status(201).json(restaurant);
     });
   } catch (err) {
-    console.log(err);
+    
     res.status(500).json({ msg: "Error creating Restaurant" });
   }
 };
@@ -102,7 +102,7 @@ const updateRestaurant = async (req: Request, res: Response) => {
       res.status(200).json(restaurant);
     });
   } catch (err) {
-    console.log(err);
+  
     res.status(500).json("error updating restaurant");
   }
 };
@@ -118,7 +118,7 @@ const getMyRestaurantOrder = async (req: Request, res: Response) => {
       .populate("user");
     return res.status(200).json(order)
   } catch (err) {
-    console.log(err);
+   
     return res.status(500).json({ message: "error in getting Order" });
   }
 };
@@ -141,7 +141,7 @@ const updateOrderStatus=async(req:Request,res:Response)=> {
     await order.save()
     return res.status(200).json(order)
   }catch(err){
-    console.log(err)
+    
     return res.status(500).json({message:"Unable to update order status"})
   }
 }

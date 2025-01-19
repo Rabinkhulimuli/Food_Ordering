@@ -7,7 +7,7 @@ function OrderStatusPage() {
     if (isLoading){
         return <div>Loading ...</div>
     }
-    console.log(orders)
+   
     if(!orders || orders.length==0){
         return "No Order Found"
     }
